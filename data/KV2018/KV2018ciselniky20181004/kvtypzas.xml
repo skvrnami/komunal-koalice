@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<KVTYPZAS DATGENER="2018-10-04T17:06:55" xmlns="http://www.volby.cz/kv/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.volby.cz/kv/ kvtypzas.xsd">
+ <KVTYPZAS_ROW>
+  <TYPZASTUP>1</TYPZASTUP>
+  <NAZTYPUZAS>Zastupitelstvo obce,městysu,města,statutár.města,hl.m.Prahy</NAZTYPUZAS>
+ </KVTYPZAS_ROW>
+ <KVTYPZAS_ROW>
+  <TYPZASTUP>2</TYPZASTUP>
+  <NAZTYPUZAS>Zastupitelstvo městské části nebo městského obvodu</NAZTYPUZAS>
+ </KVTYPZAS_ROW>
+</KVTYPZAS>

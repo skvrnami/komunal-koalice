@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<KVDRUHZ DATGENER="2018-10-04T17:06:55" xmlns="http://www.volby.cz/kv/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.volby.cz/kv/ kvdruhz.xsd">
+ <KVDRUHZ_ROW>
+  <DRUHZASTUP>1</DRUHZASTUP>
+  <NAZDRUHZAS>Zastupitelstvo obce</NAZDRUHZAS>
+ </KVDRUHZ_ROW>
+ <KVDRUHZ_ROW>
+  <DRUHZASTUP>2</DRUHZASTUP>
+  <NAZDRUHZAS>Zastupitelstvo města</NAZDRUHZAS>
+ </KVDRUHZ_ROW>
+ <KVDRUHZ_ROW>
+  <DRUHZASTUP>3</DRUHZASTUP>
+  <NAZDRUHZAS>Zastupitelstvo statutárního města</NAZDRUHZAS>
+ </KVDRUHZ_ROW>
+ <KVDRUHZ_ROW>
+  <DRUHZASTUP>4</DRUHZASTUP>
+  <NAZDRUHZAS>Zastupitelstvo hl.m.Prahy</NAZDRUHZAS>
+ </KVDRUHZ_ROW>
+ <KVDRUHZ_ROW>
+  <DRUHZASTUP>5</DRUHZASTUP>
+  <NAZDRUHZAS>Zastupitelstvo městské části nebo městského obvodu</NAZDRUHZAS>
+ </KVDRUHZ_ROW>
+ <KVDRUHZ_ROW>
+  <DRUHZASTUP>6</DRUHZASTUP>
+  <NAZDRUHZAS>Zastupitelstvo městysu</NAZDRUHZAS>
+ </KVDRUHZ_ROW>
+</KVDRUHZ>
