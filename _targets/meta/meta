@@ -15,13 +15,14 @@ count_coalitions_kvros|function|3718d4e00d7dce51|||||||||||||||
 crate_coocurrence_matrix|function|fcd54d0973c09514|||||||||||||||
 create_cooccurrence_matrix|function|fcd54d0973c09514|||||||||||||||
 create_dyad|function|46684774c039ab0f|||||||||||||||
+created_dyads_2018|stem|403ddf3c559da760|f5cd08837f5db71d|efcfe8b880149f1a|-1744704143||t19338.9223791053s|35cf5a3c6c533c66|1706|rds|local|vector|||0.912||
 created_dyads_2022|stem|3c39b762e17c74e0|bf9653bc4d5e9e25|59aa854bc677c8bd|-201842224||t19337.8879323188s|21b811bc744dec75|2517|rds|local|vector|||1.547||
 cssd_change|stem|82e60c5f72e099a2|091c5562b0517282|737e2d1f06381847|-451403944||t19337.871367706s|ae3ca543e47cf4fd|166|rds|local|vector|||0.006||
 eligible_comparison|stem|7cbd1e85097df667|3fa1d34c53963053|b34ac332470f7733|-529639640||t19337.8713674073s|49c23b73747bdb3f|5865|rds|local|vector|||0.01||
 eligible_municipalities_2018|stem|a14919b3f55d2f9a|515a9148fa029237|89fd26b88675789f|3185664||t19337.7711519178s|0b7493a0bb3ffd44|3765|rds|local|vector|||0.038||
 eligible_municipalities_2022|stem|eae11d590181396b|65a103bb25e111b6|13cd5a9ed0ee41f8|1328724255||t19337.7711512238s|e9f289f2f6fcd133|2688|rds|local|vector|||0.041||
 file|object|b23e238e702801a7|||||||||||||||
-final_df|stem|92972c29d9ffe68d|225058414b092196|2ed4a02aebcaf3e2|1533787511||t19337.9091915637s|a5494d0f0021d10d|22359|rds|local|vector|||0.019||
+final_df|stem|3a0f6a0cccebe8f7|36f078431279624a|8931578075f2c3f7|1533787511||t19338.9362767948s|f194de189422f8b3|23028|rds|local|vector|||0.028||
 kv_2018|stem|0eaf6cde708947c3|7146c786fd494acd|dcda27dfa08f47d7|-119816568||t19330.6369500453s|d765ef1e91d18ea8|5977881|rds|local|vector|||5.14||
 kv_2022|stem|85657930574c518d|a1e2e5ab1c684f22|dcda27dfa08f47d7|776202792||t19330.6390310876s|9b052da79ee9a700|5491426|rds|local|vector|||4.675||
 kv_slozeni_2018|stem|aa4fa56dcf416179|c1a6ae3cb9a9e86b|770fc9b3beb45e88|-253755753||t19337.6672215405s|6ced00c29837a61d|290800|rds|local|vector|||1.124||

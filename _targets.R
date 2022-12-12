@@ -323,8 +323,31 @@ list(
     })
   }),
   
+  # dyads in 2018
+  # continuation of coalition from 2018 => higher prob. of el. coalition
+  tar_target(created_dyads_2018, {
+    coalitions_2018 <- parties_2018 %>% 
+      filter(KODZASTUP %in% eligible_municipalities_2022$KODZASTUP) %>% 
+      filter(ZKRATKAN8 != "NK") %>% 
+      group_by(KODZASTUP, NAZEVCELK) %>% 
+      mutate(n = n()) %>% 
+      filter(n > 1)
+    
+    unique_municipalities <- unique(coalitions_2018$KODZASTUP)
+    
+    purrr::map_df(unique_municipalities, function(x) {
+      coalitions_2018 %>% 
+        filter(KODZASTUP == x) %>% 
+        group_by(NAZEVCELK) %>% 
+        group_map(~create_dyad(.x)) %>% 
+        bind_rows() %>% 
+        mutate(KODZASTUP = x) %>% 
+        rename(party1 = V1, party2 = V2)
+    })
+  }),
+  
   # TODO: mandates gained in 2018 for each party
-  # TODO: continuation of coalition from 2018 => higher prob. of el. coalition
+  
   # TODO: composition of local government => higher prob. of electoral coalition
   # TODO: velikost obce
   # TODO: ideological position of parties
@@ -344,11 +367,20 @@ list(
     possible_dyads_2022 %>% 
       left_join(., created_dyads_2022 %>% mutate(created = 1), 
                 by = c("party1", "party2", "KODZASTUP")) %>% 
+      # DV
       mutate(
         created = ifelse(is.na(created), 0, created), 
-        spolu = party1 %in% c("ODS", "KDU-ČSL", "TOP 09") & 
-          party2 %in% c("ODS", "KDU-ČSL", "TOP 09")
-      )
+      ) %>% 
+      left_join(., created_dyads_2018 %>% mutate(created_2018_a = 1), 
+                by = c("party1", "party2", "KODZASTUP")) %>% 
+      left_join(., created_dyads_2018 %>% mutate(created_2018_b = 1), 
+                by = c("party2"="party1", "party1"="party2", "KODZASTUP")) %>% 
+      mutate(across(matches("created_2018_[a-b]"), ~ifelse(is.na(.x), 0, .x))) %>% 
+      # IV
+      mutate(created_2018 = created_2018_a + created_2018_b, 
+             spolu = party1 %in% c("ODS", "KDU-ČSL", "TOP 09") & 
+               party2 %in% c("ODS", "KDU-ČSL", "TOP 09")) %>% 
+      select(-c(created_2018_a, created_2018_b))
   }),
   
   NULL
