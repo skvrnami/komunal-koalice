@@ -7,7 +7,8 @@ tar_option_set(
   # packages that your targets need to run
   packages = c("tibble", "here", "dplyr", "readxl", "Matrix", 
                "igraph", "ggraph", "ggplot2", "tidygraph", 
-               "rvest", "ggrepel", "extrafont", "readr"), 
+               "rvest", "ggrepel", "extrafont", "readr", 
+               "lme4"), 
   format = "rds" # default storage format
 )
 
@@ -218,8 +219,6 @@ list(
   }),
   
   # find eligible municipalities
-  # FIXME: instead of CSSD/Spolu, all municipalities w/ 2 and more parties
-  # from national level
   tar_target(eligible_municipalities_2018, {
     parties_2018 %>% 
       # filter out city districts
@@ -279,11 +278,22 @@ list(
       count(spolu_n_2018, spolu_n_2022, sort = TRUE)
   }),
   
+  # instead of CSSD/Spolu, all municipalities w/ 2 and more parties
+  # from national level
+  tar_target(eligible_municipalities_2parties_and_more, {
+    parties_2022 %>% 
+      # filter out city districts
+      filter(!KODZASTUP %in% city_districts$CHODNOTA) %>% 
+      filter(ZKRATKAN8 != "NK") %>% 
+      count(KODZASTUP) %>% 
+      filter(n > 1)
+  }),
+  
   # all possible dyads
-  # TODO: do I have to include dyad - party + no party ?
   tar_target(possible_dyads_2022, {
      municipalities_parties <- parties_2022 %>% 
-      filter(KODZASTUP %in% eligible_municipalities_2022$KODZASTUP) %>% 
+      filter(KODZASTUP %in% 
+               eligible_municipalities_2parties_and_more$KODZASTUP) %>% 
       filter(ZKRATKAN8 != "NK") %>%
       group_by(KODZASTUP) %>% 
       mutate(n = n()) %>% 
@@ -291,7 +301,8 @@ list(
       # there need to be at least 2 parties for a possibility to create coalition
       filter(n > 1)
        
-     unique_municipalities <- unique(municipalities_parties$KODZASTUP)
+     unique_municipalities <- unique(
+       eligible_municipalities_2parties_and_more$KODZASTUP)
      purrr::map_df(unique_municipalities, function(x) {
        municipalities_parties %>% 
          filter(KODZASTUP == x) %>% 
@@ -304,7 +315,8 @@ list(
   # created coalitions 
   tar_target(created_dyads_2022, {
     coalitions_2022 <- parties_2022 %>% 
-      filter(KODZASTUP %in% eligible_municipalities_2022$KODZASTUP) %>% 
+      filter(KODZASTUP %in% 
+               eligible_municipalities_2parties_and_more$KODZASTUP) %>% 
       filter(ZKRATKAN8 != "NK") %>% 
       group_by(KODZASTUP, NAZEVCELK) %>% 
       mutate(n = n()) %>% 
@@ -327,7 +339,8 @@ list(
   # continuation of coalition from 2018 => higher prob. of el. coalition
   tar_target(created_dyads_2018, {
     coalitions_2018 <- parties_2018 %>% 
-      filter(KODZASTUP %in% eligible_municipalities_2022$KODZASTUP) %>% 
+      filter(KODZASTUP %in% 
+               eligible_municipalities_2parties_and_more$KODZASTUP) %>% 
       filter(ZKRATKAN8 != "NK") %>% 
       group_by(KODZASTUP, NAZEVCELK) %>% 
       mutate(n = n()) %>% 
@@ -346,24 +359,49 @@ list(
     })
   }),
   
-  # TODO: mandates gained in 2018 for each party
+  # Data on candidates in 2018 local election
+  tar_target(candidates_stats_2018, {
+    candidates_2018 %>% 
+      filter(KODZASTUP %in% created_dyads_2022$KODZASTUP) %>% 
+      filter(ZKRATKAN8 != "NK") %>% 
+      group_by(KODZASTUP, ZKRATKAN8) %>% 
+      summarise(
+        # no of mandates gained in the election
+        n_mandates = sum(MANDAT), 
+        has_mandate = n_mandates > 0,
+        # no of party members nominated by the party
+        n_party_members = sum(ZKRATKAP8 == ZKRATKAN8),
+        # pct of party members nominated by the party
+        pct_party_members = mean(ZKRATKAP8 == ZKRATKAN8) * 100, 
+        # mean age
+        mean_age = mean(VEK),
+        # share of university educated
+        pct_uni_education = mean(TITUL_KATEGORIE > "No title") * 100, 
+        .groups = "drop"
+      )
+  }),
   
   # TODO: composition of local government => higher prob. of electoral coalition
-  # TODO: velikost obce
+  # TODO: municipality size (number of voters, n of mandates in 2018 => 
+  # share of mandates in the municipality)
   # TODO: ideological position of parties
   
   # proxies for ideology
-  # TODO: education of party members for each party in 2018
-  # TODO: age of party members for each party in 2018
+  # education of party members for each party in 2018
+  # age of party members for each party in 2018
   
   # party resources
-  # TODO: number of party members on the list (members / nominated)
+  # number of party members on the list (members / nominated)
   # => more members => lower prob. of coalition
   
   # TODO: number of parties in the municipality
   # higher fragmentation => higher prob. of coalition
   
   tar_target(final_df, {
+    SPOLU <- c("ODS", "KDU-ČSL", "TOP 09")
+    PIRSTAN <- c("Piráti", "STAN")
+    TSS <- c("Trikolora", "Svobodní", "Soukromníci")
+    
     possible_dyads_2022 %>% 
       left_join(., created_dyads_2022 %>% mutate(created = 1), 
                 by = c("party1", "party2", "KODZASTUP")) %>% 
@@ -378,10 +416,42 @@ list(
       mutate(across(matches("created_2018_[a-b]"), ~ifelse(is.na(.x), 0, .x))) %>% 
       # IV
       mutate(created_2018 = created_2018_a + created_2018_b, 
-             spolu = party1 %in% c("ODS", "KDU-ČSL", "TOP 09") & 
-               party2 %in% c("ODS", "KDU-ČSL", "TOP 09")) %>% 
+             # coalitions running in 2021 parliamentary election
+             spolu = party1 %in% SPOLU & 
+               party2 %in% SPOLU, 
+             pirstan = party1 %in% PIRSTAN & 
+               party2 %in% PIRSTAN, 
+             tss = party1 %in% TSS & 
+               party2 %in% TSS) %>% 
+      left_join(., candidates_stats_2018 %>%
+                  rename_with(., ~paste0(.x, "_a"),
+                              .cols = -c(KODZASTUP, ZKRATKAN8)),
+                by = c("KODZASTUP", "party1"="ZKRATKAN8")) %>%
+      left_join(., candidates_stats_2018 %>%
+                  rename_with(., ~paste0(.x, "_b"),
+                              .cols = -c(KODZASTUP, ZKRATKAN8)),
+                by = c("KODZASTUP", "party2"="ZKRATKAN8")) %>%
+      mutate(across(matches("n_mandate"), ~ifelse(is.na(.x), 0, .x)), 
+             across(matches("has_mandate"), ~ifelse(is.na(.x), FALSE, .x))) %>% 
+      mutate(diff_mean_age = abs(mean_age_a - mean_age_b), 
+             diff_pct_uni_education = abs(pct_uni_education_a - pct_uni_education_b)) %>% 
       select(-c(created_2018_a, created_2018_b))
   }),
+  
+  # TODO: estimate models
+  tar_target(m1, {
+    glmer(created ~ created_2018 + 
+            spolu + pirstan + tss + 
+            (1 | KODZASTUP), 
+          family = binomial(link = "probit"), 
+          data = final_df)
+  }),
+  
+  # tar_target(tex_models, {
+  #   modelsummary(m1, stars = TRUE,
+  #                fmt = "%.2f",
+  #                output = "latex")
+  # }),
   
   NULL
 )
