@@ -12,12 +12,8 @@ tar_option_set(
   format = "rds" # default storage format
 )
 
-# tar_make_future() configuration (okay to leave alone):
-# Install packages {{future}}, {{future.callr}}, and {{future.batchtools}} to allow use_targets() to configure tar_make_future() options.
-
 # Load the R scripts with your custom functions:
 for (file in list.files("R", full.names = TRUE)) source(file)
-# source("other_functions.R") # Source other scripts as needed. # nolint
 
 # Replace the target list below with your own:
 list(
@@ -207,9 +203,6 @@ list(
   
   # dyads - possible coalitions ---------------------------
   
-  # TODO: all dyads for all municipalities in which CSSD 
-  # and at least two of SPOLU (ODS, KDU-CSL, TOP 09) run.
-  
   # city districts (městské části) are filtered out, 
   # they are probably dependent on the coalitions on the city level
   
@@ -289,7 +282,7 @@ list(
       filter(n > 1)
   }),
   
-  # all possible dyads
+  ## all possible dyads -----------------------------------
   tar_target(possible_dyads_2022, {
      municipalities_parties <- parties_2022 %>% 
       filter(KODZASTUP %in% 
@@ -312,7 +305,7 @@ list(
      })
   }),
   
-  # created coalitions 
+  ## created coalitions -----------------------------------
   tar_target(created_dyads_2022, {
     coalitions_2022 <- parties_2022 %>% 
       filter(KODZASTUP %in% 
@@ -335,7 +328,7 @@ list(
     })
   }),
   
-  # dyads in 2018
+  ## coalitions in 2018 -----------------------------------
   # continuation of coalition from 2018 => higher prob. of el. coalition
   tar_target(created_dyads_2018, {
     coalitions_2018 <- parties_2018 %>% 
@@ -382,9 +375,45 @@ list(
   }),
   
   # TODO: composition of local government => higher prob. of electoral coalition
-  # TODO: municipality size (number of voters, n of mandates in 2018 => 
-  # share of mandates in the municipality)
-  # TODO: ideological position of parties
+  
+  ## municipality size ------------------------------------
+  # - [x] number of inhabitants, 
+  # - [x] n of mandates in 2018 => share of mandates in the municipality)
+  tar_target(municipality_size, {
+    
+    mun_size <- read_excel(here("data", "KV2022", "KV2022reg20220810a_xlsx", 
+                                "kvrzcoco.xlsx")) %>% 
+      select(KODZASTUP, municipality_size = POCOBYV) %>% 
+      unique() # %>% 
+      # mutate(municipality_size_norm = municipality_)
+    
+    candidates_2018 %>% 
+      group_by(KODZASTUP) %>% 
+      summarise(municipality_seats = sum(MANDAT)) %>% 
+      left_join(., mun_size, by = "KODZASTUP")
+    
+  }),
+  
+  ## ideological position of parties ----------------------
+  tar_target(ches_data, {
+    read_csv(here("data", "1999-2019_CHES_dataset_means(v3).csv")) %>% 
+      filter(country == 21) %>% 
+      group_by(party) %>% 
+      filter(year == max(year)) %>% 
+      ungroup() %>% 
+      select(party, lrgen, lrecon, galtan) %>% 
+      mutate(party = recode(party, 
+                            "Pirates" = "Piráti", 
+                            "SNK ED"="SNK-ED", 
+                            "Nezavisl" = "NEZ", 
+                            "SZ" = "Zelení", 
+                            "SVOBODNI" ="Svobodní",
+                            "KDU-CSL"="KDU-ČSL",
+                            "TOP09"="TOP 09", 
+                            "KSCM"="KSČM", 
+                            "ANO2011"="ANO", 
+                            "CSSD"="ČSSD"))
+  }),
   
   # proxies for ideology
   # education of party members for each party in 2018
@@ -396,7 +425,8 @@ list(
   
   # TODO: number of parties in the municipality
   # higher fragmentation => higher prob. of coalition
-  
+
+  # final data --------------------------------------------
   tar_target(final_df, {
     SPOLU <- c("ODS", "KDU-ČSL", "TOP 09")
     PIRSTAN <- c("Piráti", "STAN")
@@ -413,6 +443,11 @@ list(
                 by = c("party1", "party2", "KODZASTUP")) %>% 
       left_join(., created_dyads_2018 %>% mutate(created_2018_b = 1), 
                 by = c("party2"="party1", "party1"="party2", "KODZASTUP")) %>% 
+      left_join(., ches_data %>% rename_with(., ~paste0(.x, "_a"), .cols = -party), 
+                by = c("party1"="party")) %>% 
+      left_join(., ches_data %>% rename_with(., ~paste0(.x, "_b"), .cols = -party), 
+                by = c("party2"="party")) %>% 
+      left_join(., municipality_size, by = "KODZASTUP") %>% 
       mutate(across(matches("created_2018_[a-b]"), ~ifelse(is.na(.x), 0, .x))) %>% 
       # IV
       mutate(created_2018 = created_2018_a + created_2018_b, 
@@ -434,17 +469,138 @@ list(
       mutate(across(matches("n_mandate"), ~ifelse(is.na(.x), 0, .x)), 
              across(matches("has_mandate"), ~ifelse(is.na(.x), FALSE, .x))) %>% 
       mutate(diff_mean_age = abs(mean_age_a - mean_age_b), 
-             diff_pct_uni_education = abs(pct_uni_education_a - pct_uni_education_b)) %>% 
+             diff_pct_uni_education = abs(pct_uni_education_a - pct_uni_education_b), 
+             share_mandates_a = n_mandates_a / municipality_seats * 100,
+             share_mandates_b = n_mandates_b / municipality_seats * 100, 
+             diff_lrgen = abs(lrgen_a - lrgen_b), 
+             diff_lrecon = abs(lrecon_a - lrecon_b), 
+             diff_galtan = abs(galtan_a - galtan_b), 
+             diff_position_euclid = sqrt((diff_lrgen - diff_galtan) ^ 2)
+             ) %>% 
       select(-c(created_2018_a, created_2018_b))
   }),
   
-  # TODO: estimate models
+  tar_target(checks, {
+    stopifnot(nrow(final_df) == nrow(possible_dyads_2022))
+  }),
+  
+  # charts ------------------------------------------------
+  
+  tar_target(diff_parl_coalitions, {
+    final_df %>% 
+      mutate(coalition = case_when(
+        spolu ~ "SPOLU", 
+        pirstan ~ "PirSTAN",
+        tss ~ "TSS", 
+        TRUE ~ "No parl. coalition"
+      ) %>% factor(., levels = c("TSS", "SPOLU", "PirSTAN", 
+                                 "No parl. coalition")), 
+        created = factor(created, levels = c(0, 1), 
+                         labels = c("Dyad not created", "Dyad created"))
+      ) %>% 
+      count(coalition, created) %>% 
+      group_by(coalition) %>% 
+      mutate(share = n / sum(n)) %>% 
+      ungroup %>% 
+      ggplot(., aes(x = factor(coalition), y = share, 
+                    fill = factor(created))) + 
+      geom_bar(stat = "identity") + 
+      scale_fill_viridis_d() + 
+      scale_y_continuous(labels = scales::percent) + 
+      theme_minimal() + 
+      theme(legend.position = "top") + 
+      labs(title = "Creation of pre-electoral coalitions in local election",
+           subtitle = "depending on coalitions in parl. election",
+           x = "Coalition", 
+           y = "",
+           fill = "",
+           caption = "Note: Missing observations excluded")
+    # geom_violin(draw_quantiles = 0.5) 
+  }),
+  
+  tar_target(diff_lrgen_chart, {
+    ggplot(final_df, aes(x = factor(created), y = diff_lrgen)) + 
+      geom_boxplot() + 
+      theme_minimal() + 
+      labs(title = "Creation of pre-electoral coalition",
+           subtitle = "depending on ideological position difference",
+           x = "Created dyad", 
+           y = "Difference in left-right position",
+           caption = "Note: Missing observations excluded")
+      # geom_violin(draw_quantiles = 0.5) 
+  }),
+  
+  tar_target(diff_lrecon_chart, {
+    ggplot(final_df, aes(x = factor(created), y = diff_lrecon)) + 
+      geom_boxplot() + 
+      theme_minimal() + 
+      labs(title = "Creation of pre-electoral coalition",
+           subtitle = "depending on ideological position difference",
+           x = "Created dyad", 
+           y = "Difference in left-right position (econ)",
+           caption = "Note: Missing observations excluded")
+    # geom_violin(draw_quantiles = 0.5) 
+  }),
+  
+  tar_target(diff_galtan_chart, {
+    ggplot(final_df, aes(x = factor(created), y = diff_galtan)) + 
+      geom_boxplot() + 
+      theme_minimal() + 
+      labs(title = "Creation of pre-electoral coalition",
+           subtitle = "depending on ideological position difference",
+           x = "Created dyad", 
+           y = "Difference in GAL-TAN position",
+           caption = "Note: Missing observations excluded")
+    # geom_violin(draw_quantiles = 0.5) 
+  }),
+  
+  tar_target(diff_euclid_chart, {
+    ggplot(final_df, aes(x = factor(created), y = diff_position_euclid)) + 
+      geom_boxplot() + 
+      theme_minimal() + 
+      labs(title = "Creation of pre-electoral coalition",
+           subtitle = "depending on ideological position difference",
+           x = "Created dyad", 
+           y = "Euclid distance in ideological position (LR gen & GAL-TAN)",
+           caption = "Note: Missing observations excluded")
+    # geom_violin(draw_quantiles = 0.5) 
+  }),
+  
+  # estimate models ---------------------------------------
+  # TODO: models
   tar_target(m1, {
     glmer(created ~ created_2018 + 
             spolu + pirstan + tss + 
             (1 | KODZASTUP), 
           family = binomial(link = "probit"), 
           data = final_df)
+  }),
+  
+  tar_target(m2, {
+    glmer(created ~ created_2018 + 
+            spolu + pirstan + tss + 
+            log(municipality_size) + 
+            (1 | KODZASTUP), 
+          family = binomial(link = "probit"), 
+          data = final_df)
+  }),
+  
+  tar_target(m3, {
+    glmer(created ~ created_2018 + 
+            spolu * log(municipality_size) + 
+            (1 | KODZASTUP), 
+          family = binomial(link = "probit"), 
+          data = final_df)
+  }),
+  
+  ## robustness checks ------------------------------------
+  tar_target(m2_bez_prahy, {
+    glmer(created ~ created_2018 + 
+            spolu + pirstan + tss + 
+            log(municipality_size) + 
+            (1 | KODZASTUP), 
+          family = binomial(link = "probit"), 
+          data = final_df %>% filter(KODZASTUP != 554782))
   }),
   
   # tar_target(tex_models, {
