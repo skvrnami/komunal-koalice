@@ -354,6 +354,13 @@ list(
   
   # Data on candidates in 2018 local election
   tar_target(candidates_stats_2018, {
+    party_votes_2018 <- candidates_2018 %>% 
+      filter(KODZASTUP %in% created_dyads_2022$KODZASTUP) %>% 
+      group_by(KODZASTUP, ZKRATKAN8) %>% 
+      summarise(n_votes = sum(POCHLASU), .groups = "drop") %>% 
+      group_by(KODZASTUP) %>% 
+      mutate(pct_votes = n_votes / sum(n_votes) * 100)
+    
     candidates_2018 %>% 
       filter(KODZASTUP %in% created_dyads_2022$KODZASTUP) %>% 
       filter(ZKRATKAN8 != "NK") %>% 
@@ -371,10 +378,35 @@ list(
         # share of university educated
         pct_uni_education = mean(TITUL_KATEGORIE > "No title") * 100, 
         .groups = "drop"
-      )
+      ) %>% 
+      left_join(., party_votes_2018, by = c("KODZASTUP", "ZKRATKAN8"))
+      
   }),
   
-  # TODO: composition of local government => higher prob. of electoral coalition
+  # composition of local government -----------------------
+  # => higher prob. of electoral coalition
+  tar_target(paired_cro, {
+    readRDS("data/paired_2018.rds")
+  }),
+  
+  tar_target(local_government_parties, {
+    paired_cro %>% 
+      # FIXME: reshuffles during the term
+      select(municipality_id, party_name) %>% 
+      unique() %>% 
+      left_join(., parties_2018 %>% select(NAZEVCELK, ZKRATKAN8, KODZASTUP), 
+                by = c("party_name"="NAZEVCELK", 
+                       "municipality_id"="KODZASTUP")) %>% 
+      filter(ZKRATKAN8 != "NK") %>% 
+      rename(KODZASTUP = municipality_id) %>% 
+      mutate(local_government = 1)
+  }),
+  
+  tar_target(ano_in_local_government, {
+    local_government_parties %>% 
+      group_by(KODZASTUP) %>% 
+      summarise(ano_government = any(ZKRATKAN8 == "ANO"))
+  }),
   
   ## municipality size ------------------------------------
   # - [x] number of inhabitants, 
@@ -392,6 +424,26 @@ list(
       summarise(municipality_seats = sum(MANDAT)) %>% 
       left_join(., mun_size, by = "KODZASTUP")
     
+  }),
+  
+  # number of parties in the municipality
+  # higher fragmentation => higher prob. of coalition
+  ## effective number of electoral parties ----------------
+  tar_target(enep, {
+    party_data <- read_excel(here("data", "KV2018", "KV2018reg20181008_xlsx", "kvros.xlsx"))
+    
+    enep_votes <- party_data %>% 
+      group_by(KODZASTUP) %>% 
+      mutate(pct_votes = PROCHLSTR / 100) %>% 
+      summarise(enep_votes = 1/sum(pct_votes^2))
+    
+    enep_seats <- party_data %>% 
+      group_by(KODZASTUP) %>% 
+      filter(MAND_STR > 0) %>% 
+      mutate(pct_seats = MAND_STR / sum(MAND_STR)) %>% 
+      summarise(enep_seats = 1/sum(pct_seats^2))
+    
+    full_join(enep_votes, enep_seats, by = "KODZASTUP")
   }),
   
   ## ideological position of parties ----------------------
@@ -419,13 +471,12 @@ list(
   # education of party members for each party in 2018
   # age of party members for each party in 2018
   
-  # party resources
+  # party resources = pct_party_members
   # number of party members on the list (members / nominated)
   # => more members => lower prob. of coalition
   
-  # TODO: number of parties in the municipality
-  # higher fragmentation => higher prob. of coalition
-
+  # new party
+  
   # final data --------------------------------------------
   tar_target(final_df, {
     SPOLU <- c("ODS", "KDU-ČSL", "TOP 09")
@@ -448,6 +499,7 @@ list(
       left_join(., ches_data %>% rename_with(., ~paste0(.x, "_b"), .cols = -party), 
                 by = c("party2"="party")) %>% 
       left_join(., municipality_size, by = "KODZASTUP") %>% 
+      left_join(., ano_in_local_government, by = "KODZASTUP") %>% 
       mutate(across(matches("created_2018_[a-b]"), ~ifelse(is.na(.x), 0, .x))) %>% 
       # IV
       mutate(created_2018 = created_2018_a + created_2018_b, 
@@ -459,19 +511,62 @@ list(
              tss = party1 %in% TSS & 
                party2 %in% TSS) %>% 
       left_join(., candidates_stats_2018 %>%
+                  mutate(contested_2018 = 1) %>% 
                   rename_with(., ~paste0(.x, "_a"),
                               .cols = -c(KODZASTUP, ZKRATKAN8)),
                 by = c("KODZASTUP", "party1"="ZKRATKAN8")) %>%
       left_join(., candidates_stats_2018 %>%
+                  mutate(contested_2018 = 1) %>% 
                   rename_with(., ~paste0(.x, "_b"),
                               .cols = -c(KODZASTUP, ZKRATKAN8)),
                 by = c("KODZASTUP", "party2"="ZKRATKAN8")) %>%
-      mutate(across(matches("n_mandate"), ~ifelse(is.na(.x), 0, .x)), 
+      left_join(., local_government_parties %>% 
+                  rename_with(., ~paste0(.x, "_a"),
+                              .cols = -c(KODZASTUP, ZKRATKAN8)), 
+                by = c("KODZASTUP", "party1"="ZKRATKAN8")) %>% 
+      left_join(., local_government_parties %>% 
+                  rename_with(., ~paste0(.x, "_b"),
+                              .cols = -c(KODZASTUP, ZKRATKAN8)), 
+                by = c("KODZASTUP", "party2"="ZKRATKAN8")) %>% 
+      left_join(., enep, by = "KODZASTUP") %>% 
+      mutate(across(matches("n_mandate"), ~ifelse(is.na(.x), 0, .x)),
+             across(matches("n_party_members"), ~ifelse(is.na(.x), 0, .x)),
+             across(matches("contested_2018_[a-b]{1}"), ~ifelse(is.na(.x), 0, .x)), 
+             across(matches("local_government_[a-b]{1}"), ~ifelse(is.na(.x), 0, .x)), 
              across(matches("has_mandate"), ~ifelse(is.na(.x), FALSE, .x))) %>% 
       mutate(diff_mean_age = abs(mean_age_a - mean_age_b), 
              diff_pct_uni_education = abs(pct_uni_education_a - pct_uni_education_b), 
              share_mandates_a = n_mandates_a / municipality_seats * 100,
              share_mandates_b = n_mandates_b / municipality_seats * 100, 
+             sum_votes = pct_votes_a + pct_votes_b,
+             any_new = contested_2018_a == 0 | contested_2018_b == 0,
+             no_mandates_a = n_mandates_a == 0, 
+             no_mandates_b = n_mandates_b == 0, 
+             no_mandates = case_when(
+               no_mandates_a & no_mandates_b ~ "Both without a mandate", 
+               no_mandates_a | no_mandates_b ~ "One without a mandate", 
+               TRUE ~ "Both with mandates"
+             ),
+             local_government_fct = case_when(
+               local_government_a == 1 & local_government_b == 1 ~ 
+                 "Both in government", 
+               local_government_a == 0 & local_government_b == 0 ~ 
+                 "Both in opposition",
+               TRUE ~ "Different position in local government"
+             ) %>% factor(., levels = c(
+               "Different position in local government", 
+               "Both in government", 
+               "Both in opposition"
+             )),
+             local_government_dummy = as.numeric(
+               local_government_a == local_government_b
+             ),
+             r_pct_party_members_a = if_else(is.na(pct_party_members_a), 
+                                             0, pct_party_members_a),
+             r_pct_party_members_b = if_else(is.na(pct_party_members_b), 
+                                             0, pct_party_members_b),
+             pct_party_members = (r_pct_party_members_a + r_pct_party_members_b) / 2,
+             n_party_members = (n_party_members_a + n_party_members_b) / municipality_seats,
              diff_lrgen = abs(lrgen_a - lrgen_b), 
              diff_lrecon = abs(lrecon_a - lrecon_b), 
              diff_galtan = abs(galtan_a - galtan_b), 
@@ -516,6 +611,29 @@ list(
            fill = "",
            caption = "Note: Missing observations excluded")
     # geom_violin(draw_quantiles = 0.5) 
+  }),
+  
+  tar_target(diff_local_government, {
+    final_df %>% 
+      # filter(municipality_seats >= 15) %>% 
+      count(local_government_fct, created) %>% 
+      group_by(local_government_fct) %>% 
+      mutate(share = n / sum(n)) %>% 
+      ungroup %>% 
+      ggplot(., aes(x = factor(local_government_fct), y = share, 
+                    fill = factor(created, levels = c(0, 1), 
+                                  labels = c("Pre-electoral coalition NOT created", 
+                                             "Pre-electoral coalition created")))) + 
+      geom_bar(stat = "identity") + 
+      scale_fill_viridis_d() + 
+      scale_y_continuous(labels = scales::percent) + 
+      theme_minimal() + 
+      theme(legend.position = "top") + 
+      labs(title = "Creation of pre-electoral coalitions in local election",
+           subtitle = "depending on position in local government",
+           x = "Position in local government", 
+           y = "",
+           fill = "")
   }),
   
   tar_target(diff_lrgen_chart, {
@@ -588,6 +706,47 @@ list(
   tar_target(m3, {
     glmer(created ~ created_2018 + 
             spolu * log(municipality_size) + 
+            (1 | KODZASTUP), 
+          family = binomial(link = "probit"), 
+          data = final_df)
+  }),
+  
+  tar_target(m4, {
+    glmer(created ~ created_2018 + 
+            spolu + pirstan + diff_lrgen + diff_galtan + 
+            (1 | KODZASTUP), 
+          family = binomial(link = "probit"), 
+          data = final_df)
+  }),
+  
+  tar_target(m5, {
+    glmer(created ~ created_2018 + 
+            diff_mean_age + 
+            sqrt(diff_pct_uni_education) + 
+            log(municipality_size) + 
+            (1 | KODZASTUP), 
+          family = binomial(link = "probit"), 
+          data = final_df)
+  }),
+  
+  tar_target(m6, {
+    glmer(created ~ created_2018 + any_new + 
+            (1 | KODZASTUP), 
+          family = binomial(link = "probit"), 
+          data = final_df)
+  }),
+  
+  tar_target(m7, {
+    glmer(created ~ created_2018 + 
+            spolu + pirstan + tss + local_government_dummy + 
+            (1 | KODZASTUP), 
+          family = binomial(link = "probit"), 
+          data = final_df)
+  }),
+  
+  tar_target(m8, {
+    glmer(created ~ created_2018 + 
+            spolu * local_government_fct +
             (1 | KODZASTUP), 
           family = binomial(link = "probit"), 
           data = final_df)
