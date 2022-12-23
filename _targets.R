@@ -169,6 +169,37 @@ list(
            width = 12, height = 8)
   }),
   
+  tar_target(coalitions_graph_2018_en, {
+    graph <- graph.adjacency(matrix_coalitions_2018, 
+                             mode = 'undirected', 
+                             weighted = TRUE)
+    V(graph)$n_municipalities <- party_municipalities_2018$n
+    
+    tbl_g <- as_tbl_graph(graph)
+    
+    tbl_g %>% 
+      activate(nodes) %>% 
+      filter(!name %in% c("DSZ", "STO", "SLK", 
+                          "SD-SN", "S.cz", "JAUNER", 
+                          "Hora 2014", "Ostatní")) %>% 
+      ggraph(., layout = "auto") + 
+      geom_node_point(aes(size = n_municipalities), alpha = 0.5, colour = "black") +
+      geom_edge_link(aes(edge_width = weight), alpha = 0.3) + 
+      geom_node_text(aes(label = name)) + 
+      theme_graph() + 
+      labs(
+        title = "Pre-electoral coalitions in the 2018 local elections",
+        size = "N of municipalities in which the party run", 
+        edge_width = "N of pre-electoral coalitions", 
+        caption = "Data: Czech Statistical Office (volby.cz), calculations by author, parties not forming PECs excluded (except for ANO)"
+      )
+  }), 
+  
+  tar_target(coalitions_graph_2018_file_en, {
+    ggsave(filename = "output/koalice_2018_en.png", coalitions_graph_2018_en, 
+           width = 12, height = 8)
+  }),
+  
   tar_target(coalitions_graph_2022, {
     graph <- graph.adjacency(matrix_coalitions_2022, 
                              mode = 'undirected', 
@@ -198,6 +229,38 @@ list(
   
   tar_target(coalitions_graph_2022_file, {
     ggsave(filename = "output/koalice_2022.png", coalitions_graph_2022, 
+           width = 12, height = 8)
+  }),
+  
+  tar_target(coalitions_graph_2022_en, {
+    graph <- graph.adjacency(matrix_coalitions_2022, 
+                             mode = 'undirected', 
+                             weighted = TRUE)
+    V(graph)$n_municipalities <- party_municipalities_2022$n
+    
+    tbl_g <- as_tbl_graph(graph)
+    
+    tbl_g %>% 
+      activate(nodes) %>% 
+      filter(!name %in% c("DSZ", "STO", "SLK", "SD-SN", "S.cz", "JAUNER", 
+                          "Hora 2014", "Ostatní", "Ostravak", "VOK", 
+                          "NV", "PRO PLZEŇ", "MHNHRM", "COEX", 
+                          "DSZ-ZA PR.ZVÍŘ.")) %>% 
+      ggraph(., layout = "auto") + 
+      geom_node_point(aes(size = n_municipalities), alpha = 0.5, colour = "black") +
+      geom_edge_link(aes(edge_width = weight), alpha = 0.3) + 
+      geom_node_text(aes(label = name)) + 
+      theme_graph() + 
+      labs(
+        title = "Pre-electoral coalitions in the 2022 local election",
+        size = "N of municipalities in which the party run", 
+        edge_width = "N of pre-electoral coalitions", 
+        caption = "Data: Czech Statistical Office (volby.cz), calculations by author, parties not forming PECs excluded"
+      )
+  }), 
+  
+  tar_target(coalitions_graph_2022_file_en, {
+    ggsave(filename = "output/koalice_2022_en.png", coalitions_graph_2022_en, 
            width = 12, height = 8)
   }),
   
@@ -405,7 +468,10 @@ list(
   tar_target(ano_in_local_government, {
     local_government_parties %>% 
       group_by(KODZASTUP) %>% 
-      summarise(ano_government = any(ZKRATKAN8 == "ANO"))
+      summarise(ano_government = any(ZKRATKAN8 == "ANO"), 
+                spolu_government = any(ZKRATKAN8 %in% c(
+                  "ODS", "KDU-ČSL", "TOP 09")), 
+                ano_spolu_government = ano_government & spolu_government)
   }),
   
   ## municipality size ------------------------------------
@@ -763,7 +829,7 @@ list(
   }),
   
   # tar_target(tex_models, {
-  #   modelsummary(m1, stars = TRUE,
+  #   modelsummary(list(m1, m2), stars = TRUE,
   #                fmt = "%.2f",
   #                output = "latex")
   # }),
