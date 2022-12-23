@@ -10,13 +10,13 @@ city_districts|stem|5c373feb9c1fdec5|9553a57032c52b71|4eb66d921d3e1a1c|964177918
 coalitions_2018|stem|11ca91d896c8779e|38fa70c365b68e6b|b36f6286cf453be6|-786025332||t19337.6672346229s|2b94cf7be0c26fc5|85762|rds|local|vector|||0.297||
 coalitions_2022|stem|5a360d2f6c83ff05|42169abd3f8d5fc2|197e9c36bbf9e9ef|539388659||t19337.6672437422s|f5ee89033b8e8339|77499|rds|local|vector|||0.171||
 coalitions_graph_2018|stem|6010906500cb6827|d542954f35abd530|6a4dcc91a1e9d0f5|1466885789||t19337.7432897509s|c1b610a72b56440f|104668|rds|local|vector|||0.037||
-coalitions_graph_2018_en|stem|184219e3c2411fab|04630cd9a6717fa5|6a4dcc91a1e9d0f5|-810093140||t19349.269575439s|354b5c4b839e9a60|104688|rds|local|vector|||0.036||
+coalitions_graph_2018_en|stem|501eb5e0c37d0a4f|880c83aa18bdd15e|c9a8c1806ede2ee6|-810093140||t19349.8389554566s|901b467f937ce39b|129157|rds|local|vector|||0.115||
 coalitions_graph_2018_file|stem|8d2acac2a31c5889|d2ca3f4ca3df305b|65fda9e75f7a0144|1631480377||t19337.7440624448s|ff026697d66e9a9f|75|rds|local|vector|||0.524|1m22mUsing the size aesthetic in this geom was deprecated in ggplot2 3.4.0.36mℹ39m Please use linewidth in the default_aes field and elsewhere instead.|
-coalitions_graph_2018_file_en|stem|d98f0b42986eeb9f|2c3015fa72fe1799|3b96c3c65df2163f|-2097130084||t19349.2695828299s|c852eab37a726e04|78|rds|local|vector|||0.476|1m22mUsing the size aesthetic in this geom was deprecated in ggplot2 3.4.0.36mℹ39m Please use linewidth in the default_aes field and elsewhere instead.|
+coalitions_graph_2018_file_en|stem|d98f0b42986eeb9f|2c3015fa72fe1799|4cc4a4926cbe9b4f|-2097130084||t19349.8389634973s|c852eab37a726e04|78|rds|local|vector|||0.635|1m22mUsing the size aesthetic in this geom was deprecated in ggplot2 3.4.0.36mℹ39m Please use linewidth in the default_aes field and elsewhere instead.|
 coalitions_graph_2022|stem|8ec2415c1e4cfb5a|3a679588cdc485d5|4824202ece20fc04|-2037370929||t19337.7432902807s|33f516488a311726|104214|rds|local|vector|||0.01||
-coalitions_graph_2022_en|stem|c43f00696d29eb43|77521a711720ab68|4824202ece20fc04|-1750110327||t19349.2695759878s|62757dd45eb3b1f6|104245|rds|local|vector|||0.01||
+coalitions_graph_2022_en|stem|9200d4aecba53a2c|d92c57bbba401944|5d4d46fc18748a9a|-1750110327||t19349.8389561108s|dd860aa4ee209617|129035|rds|local|vector|||0.01||
 coalitions_graph_2022_file|stem|5d6a8d1eb0ce19fc|5bf25571838ed0b6|e1f4e669461f4120|1054014411||t19337.7440665936s|ff026697d66e9a9f|75|rds|local|vector|||0.345||
-coalitions_graph_2022_file_en|stem|05dcc31cc3866dbb|d77bfc6bd79f6e92|a50bec20daeb9161|241546499||t19349.2695868505s|c852eab37a726e04|78|rds|local|vector|||0.343||
+coalitions_graph_2022_file_en|stem|05dcc31cc3866dbb|d77bfc6bd79f6e92|2c29b20052daa9e5|241546499||t19349.8389688225s|c852eab37a726e04|78|rds|local|vector|||0.437||
 count_candidates_in_party|function|6ce1c2d9c4ae104e|||||||||||||||
 count_coalitions|function|a9bd39b099283ab1|||||||||||||||
 count_coalitions_kvros|function|3718d4e00d7dce51|||||||||||||||

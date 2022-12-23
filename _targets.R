@@ -138,42 +138,17 @@ list(
   }),
   
   # coalitions graphs -------------------------------------
-  tar_target(coalitions_graph_2018, {
-    graph <- graph.adjacency(matrix_coalitions_2018, 
-                             mode = 'undirected', 
-                             weighted = TRUE)
-    V(graph)$n_municipalities <- party_municipalities_2018$n
-    
-    tbl_g <- as_tbl_graph(graph)
-    
-    tbl_g %>% 
-      activate(nodes) %>% 
-      filter(!name %in% c("DSZ", "STO", "SLK", 
-                          "SD-SN", "S.cz", "JAUNER", 
-                          "Hora 2014", "Ostatní")) %>% 
-      ggraph(., layout = "auto") + 
-      geom_node_point(aes(size = n_municipalities), alpha = 0.5, colour = "black") +
-      geom_edge_link(aes(edge_width = weight), alpha = 0.3) + 
-      geom_node_text(aes(label = name)) + 
-      theme_graph() + 
-      labs(
-        title = "Předvolební koalice během obecních voleb 2018",
-        size = "Počet obcí, kde strana kandidovala", 
-        edge_width = "Počet koalic mezi stranami", 
-        caption = "Data: ČSÚ (volby.cz), výpočet autor, bez nekoalujících stran (kromě ANO)"
-      )
-  }), 
-  
-  tar_target(coalitions_graph_2018_file, {
-    ggsave(filename = "output/koalice_2018.png", coalitions_graph_2018, 
-           width = 12, height = 8)
-  }),
-  
   tar_target(coalitions_graph_2018_en, {
     graph <- graph.adjacency(matrix_coalitions_2018, 
                              mode = 'undirected', 
                              weighted = TRUE)
     V(graph)$n_municipalities <- party_municipalities_2018$n
+    V(graph)$coalition <- case_when(
+      names(V(graph)) %in% c("ODS", "TOP 09", "KDU-ČSL") ~ "Spolu", 
+      names(V(graph)) %in% c("Piráti", "STAN") ~ "PirSTAN", 
+      names(V(graph)) %in% c("Trikolora", "Svobodní", "Soukromníci") ~ "TSS",
+      TRUE ~ "No national PEC"
+    )
     
     tbl_g <- as_tbl_graph(graph)
     
@@ -183,15 +158,17 @@ list(
                           "SD-SN", "S.cz", "JAUNER", 
                           "Hora 2014", "Ostatní")) %>% 
       ggraph(., layout = "auto") + 
-      geom_node_point(aes(size = n_municipalities), alpha = 0.5, colour = "black") +
-      geom_edge_link(aes(edge_width = weight), alpha = 0.3) + 
-      geom_node_text(aes(label = name)) + 
+      geom_node_text(aes(label = name), repel = TRUE) + 
+      geom_node_point(aes(size = n_municipalities, colour = coalition)) +
+      geom_edge_fan(aes(edge_width = weight), alpha = 0.3) + 
+      scale_colour_viridis_d(end = 0.8) + 
       theme_graph() + 
       labs(
         title = "Pre-electoral coalitions in the 2018 local elections",
         size = "N of municipalities in which the party run", 
+        colour = "PEC in 2021 parliamentary election",
         edge_width = "N of pre-electoral coalitions", 
-        caption = "Data: Czech Statistical Office (volby.cz), calculations by author, parties not forming PECs excluded (except for ANO)"
+        caption = "Data: Czech Statistical Office (volby.cz), calculations by author, parties which did not form PECs excluded (except for ANO)"
       )
   }), 
   
@@ -200,43 +177,17 @@ list(
            width = 12, height = 8)
   }),
   
-  tar_target(coalitions_graph_2022, {
-    graph <- graph.adjacency(matrix_coalitions_2022, 
-                             mode = 'undirected', 
-                             weighted = TRUE)
-    V(graph)$n_municipalities <- party_municipalities_2022$n
-    
-    tbl_g <- as_tbl_graph(graph)
-    
-    tbl_g %>% 
-      activate(nodes) %>% 
-      filter(!name %in% c("DSZ", "STO", "SLK", "SD-SN", "S.cz", "JAUNER", 
-                          "Hora 2014", "Ostatní", "Ostravak", "VOK", 
-                          "NV", "PRO PLZEŇ", "MHNHRM", "COEX", 
-                          "DSZ-ZA PR.ZVÍŘ.")) %>% 
-      ggraph(., layout = "auto") + 
-      geom_node_point(aes(size = n_municipalities), alpha = 0.5, colour = "black") +
-      geom_edge_link(aes(edge_width = weight), alpha = 0.3) + 
-      geom_node_text(aes(label = name)) + 
-      theme_graph() + 
-      labs(
-        title = "Předvolební koalice během obecních voleb 2022",
-        size = "Počet obcí, kde strana kandidovala", 
-        edge_width = "Počet koalic mezi stranami", 
-        caption = "Data: ČSÚ (volby.cz), výpočet autor, bez nekoalujících stran"
-      )
-  }), 
-  
-  tar_target(coalitions_graph_2022_file, {
-    ggsave(filename = "output/koalice_2022.png", coalitions_graph_2022, 
-           width = 12, height = 8)
-  }),
-  
   tar_target(coalitions_graph_2022_en, {
     graph <- graph.adjacency(matrix_coalitions_2022, 
                              mode = 'undirected', 
                              weighted = TRUE)
     V(graph)$n_municipalities <- party_municipalities_2022$n
+    V(graph)$coalition <- case_when(
+      names(V(graph)) %in% c("ODS", "TOP 09", "KDU-ČSL") ~ "Spolu", 
+      names(V(graph)) %in% c("Piráti", "STAN") ~ "PirSTAN", 
+      names(V(graph)) %in% c("Trikolora", "Svobodní", "Soukromníci") ~ "TSS",
+      TRUE ~ "No national PEC"
+    )
     
     tbl_g <- as_tbl_graph(graph)
     
@@ -247,15 +198,17 @@ list(
                           "NV", "PRO PLZEŇ", "MHNHRM", "COEX", 
                           "DSZ-ZA PR.ZVÍŘ.")) %>% 
       ggraph(., layout = "auto") + 
-      geom_node_point(aes(size = n_municipalities), alpha = 0.5, colour = "black") +
-      geom_edge_link(aes(edge_width = weight), alpha = 0.3) + 
-      geom_node_text(aes(label = name)) + 
+      geom_node_point(aes(size = n_municipalities, colour = coalition)) +
+      geom_edge_fan(aes(edge_width = weight), alpha = 0.3) + 
+      geom_node_text(aes(label = name), repel = TRUE) + 
       theme_graph() + 
+      scale_colour_viridis_d(end = 0.8) + 
       labs(
         title = "Pre-electoral coalitions in the 2022 local election",
         size = "N of municipalities in which the party run", 
+        colour = "PEC in 2021 parliamentary election",
         edge_width = "N of pre-electoral coalitions", 
-        caption = "Data: Czech Statistical Office (volby.cz), calculations by author, parties not forming PECs excluded"
+        caption = "Data: Czech Statistical Office (volby.cz), calculations by author, parties which did not form PECs excluded"
       )
   }), 
   
