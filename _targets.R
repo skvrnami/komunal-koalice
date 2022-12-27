@@ -5,10 +5,10 @@ library(tarchetypes)
 # Set target options:
 tar_option_set(
   # packages that your targets need to run
-  packages = c("tibble", "here", "dplyr", "readxl", "Matrix", 
+  packages = c("tibble", "here", "dplyr", "readxl", "readr",
                "igraph", "ggraph", "ggplot2", "tidygraph", 
                "rvest", "ggrepel", "extrafont", "readr", 
-               "lme4"), 
+               "lme4", "Matrix"), 
   format = "rds" # default storage format
 )
 
@@ -496,6 +496,60 @@ list(
   
   # new party
   
+  # senate election ---------------------------------------
+  # were Senate election held in the municipality
+  tar_target(municipalities_senate, {
+    serk <- read_excel("data/senate_2022/serk.xlsx")
+    
+    read_csv("data/VAZ0043_1057_CS.csv", 
+             locale = locale(encoding = "WINDOWS-1250")) %>% 
+      select(obec = CHODNOTA1, senat_obvod = CHODNOTA2) %>% 
+      mutate(senate_election2022 = senat_obvod %in% serk$OBVOD) %>% 
+      group_by(obec) %>% 
+      summarise(senate_election2022 = any(senate_election2022))
+  }),
+  
+  # cooperation in the senate election
+  tar_target(senate_dyads, {
+    serk <- read_excel(here("data", "senate_2022", "serk.xlsx"))
+    cvs <- read_excel(here("data", "senate_2022", "SE2022ciselniky20220916", "cvs.xlsx"))
+    cns <- read_excel(here("data", "senate_2022", "SE2022ciselniky20220916", "cns.xlsx")) %>% 
+      select(NSTRANA, ZKRATKAN8)
+    
+    senate_coalitions <- cvs %>% 
+      filter(VSTRANA %in% serk$VSTRANA) %>% 
+      select(VSTRANA, SLOZENI) %>% 
+      mutate(SLOZENI = strsplit(SLOZENI, ",")) %>% 
+      tidyr::unnest(., SLOZENI) %>% 
+      mutate(SLOZENI = as.numeric(SLOZENI)) %>% 
+      left_join(., cns, by = c("SLOZENI"="NSTRANA")) %>% 
+      group_by(VSTRANA) %>% 
+      mutate(n_parties = n()) %>% 
+      filter(n_parties > 1)
+    
+    obce_senat <- read_csv("data/VAZ0043_1057_CS.csv", 
+                           locale = locale(encoding = "WINDOWS-1250")) %>% 
+      select(KODZASTUP = CHODNOTA1, senat_obvod = CHODNOTA2) %>% 
+      mutate(senat_obvod = as.numeric(senat_obvod))
+    
+    senate_coalition_candidates <- inner_join(serk %>% select(OBVOD, VSTRANA), 
+                                              senate_coalitions) 
+    
+    unique_senate_districts <- unique(senate_coalition_candidates$OBVOD)
+    
+    purrr::map_df(unique_senate_districts, function(x) {
+      senate_coalition_candidates %>% 
+        filter(OBVOD == x) %>% 
+        group_by(VSTRANA) %>% 
+        group_map(~create_dyad(.x)) %>% 
+        bind_rows() %>% 
+        mutate(OBVOD = x) %>% 
+        rename(party1 = V1, party2 = V2)
+    }) %>% left_join(., obce_senat, by = c("OBVOD"="senat_obvod")) %>% 
+      count(party1, party2, KODZASTUP) %>% 
+      rename(senate_dyad_n = n)
+  }),
+  
   # final data --------------------------------------------
   tar_target(final_df, {
     SPOLU <- c("ODS", "KDU-ČSL", "TOP 09")
@@ -513,15 +567,23 @@ list(
                 by = c("party1", "party2", "KODZASTUP")) %>% 
       left_join(., created_dyads_2018 %>% mutate(created_2018_b = 1), 
                 by = c("party2"="party1", "party1"="party2", "KODZASTUP")) %>% 
+      left_join(., senate_dyads %>% mutate(created_senate_a = 1), 
+                by = c("party1", "party2", "KODZASTUP")) %>% 
+      left_join(., senate_dyads %>% mutate(created_senate_b = 1), 
+                by = c("party2"="party1", "party1"="party2", "KODZASTUP")) %>% 
       left_join(., ches_data %>% rename_with(., ~paste0(.x, "_a"), .cols = -party), 
                 by = c("party1"="party")) %>% 
       left_join(., ches_data %>% rename_with(., ~paste0(.x, "_b"), .cols = -party), 
                 by = c("party2"="party")) %>% 
       left_join(., municipality_size, by = "KODZASTUP") %>% 
       left_join(., ano_in_local_government, by = "KODZASTUP") %>% 
-      mutate(across(matches("created_2018_[a-b]"), ~ifelse(is.na(.x), 0, .x))) %>% 
+      mutate(across(matches("created_2018_[a-b]"), ~ifelse(is.na(.x), 0, .x)), 
+             across(matches("created_senate_[a-b]"), ~ifelse(is.na(.x), 0, .x)), 
+             across(matches("senate_dyad_n"), ~ifelse(is.na(.x), 0, .x))) %>% 
       # IV
       mutate(created_2018 = created_2018_a + created_2018_b, 
+             created_senate = created_senate_a + created_senate_b,
+             senate_dyad_n = senate_dyad_n.x + senate_dyad_n.y, 
              # coalitions running in 2021 parliamentary election
              spolu = party1 %in% SPOLU & 
                party2 %in% SPOLU, 
@@ -548,6 +610,7 @@ list(
                               .cols = -c(KODZASTUP, ZKRATKAN8)), 
                 by = c("KODZASTUP", "party2"="ZKRATKAN8")) %>% 
       left_join(., enep, by = "KODZASTUP") %>% 
+      left_join(., municipalities_senate, by = c("KODZASTUP"="obec")) %>% 
       mutate(across(matches("n_mandate"), ~ifelse(is.na(.x), 0, .x)),
              across(matches("n_party_members"), ~ifelse(is.na(.x), 0, .x)),
              across(matches("contested_2018_[a-b]{1}"), ~ifelse(is.na(.x), 0, .x)), 
@@ -591,7 +654,9 @@ list(
              diff_galtan = abs(galtan_a - galtan_b), 
              diff_position_euclid = sqrt((diff_lrgen - diff_galtan) ^ 2)
              ) %>% 
-      select(-c(created_2018_a, created_2018_b))
+      select(-c(created_2018_a, created_2018_b, 
+                created_senate_a, created_senate_b, 
+                senate_dyad_n.x, senate_dyad_n.y))
   }),
   
   tar_target(checks, {
@@ -707,6 +772,14 @@ list(
   # TODO: models
   tar_target(m1, {
     glmer(created ~ created_2018 + 
+            spolu + pirstan + tss + 
+            (1 | KODZASTUP), 
+          family = binomial(link = "probit"), 
+          data = final_df)
+  }),
+  
+  tar_target(m1_senate, {
+    glmer(created ~ created_2018 + created_senate + 
             spolu + pirstan + tss + 
             (1 | KODZASTUP), 
           family = binomial(link = "probit"), 
