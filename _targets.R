@@ -8,8 +8,7 @@ tar_option_set(
   packages = c("tibble", "here", "dplyr", "readxl", "readr",
                "igraph", "ggraph", "ggplot2", "tidygraph", 
                "rvest", "ggrepel", "extrafont", "readr", 
-               "lme4", "Matrix", "lmtest", "sandwich", 
-               "cem", "MatchIt", "estimatr"), 
+               "lme4", "Matrix", "cem", "MatchIt", "estimatr"), 
   format = "rds" # default storage format
 )
 
@@ -1010,6 +1009,10 @@ list(
   tar_target(match_model2, {
     lm_robust(created ~ created_senate, data = match_senate_data2, 
               weights = match_senate_data2$weights)
+  }),
+  
+  tar_target(stop, {
+    stopifnot(FALSE)
   }),
   
   NULL

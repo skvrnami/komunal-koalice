@@ -99,6 +99,7 @@ rglm|function|40497bf017fd669f|||||||||||||||
 senate_dyads|stem|b40ab803c6c9e8ea|7a11dbca3c39f1f3|8ccda904c3565de1|-211329257||t19353.8894135555s|6f07ad362ca536b5|7428|rds|local|vector|||1.362||
 spolu_change|stem|70ec84e87c45f7ef|e43a5b4f66f95f84|ec538d8c84143633|1088558364||t19337.8713676102s|74c6dee26eb45e63|210|rds|local|vector|||0.012||
 spolu1|stem|bef044ae7756077a|f736ba9f55afaf67|603177729cd39c0f|-314446566||t19356.7285496775s|8f67e77ddff42b8e|688|rds|local|vector|||0.009||
+stop|stem||aaf843bc295cc3b6|67b3de1700ceb789|-1827887118||t19365.715347671s||0|rds|local|vector|||1.345||FALSE is not TRUE
 summarise_coalitions|function|a9bd39b099283ab1|||||||||||||||
 summarise_municipal_nominations|function|a85c2e7b37997820|||||||||||||||
 summarise_top_municipal_parties|function|a85c2e7b37997820|||||||||||||||
