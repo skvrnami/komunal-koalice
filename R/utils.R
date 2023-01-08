@@ -127,3 +127,8 @@ create_dyad <- function(df){
         t() %>% 
         as.data.frame()
 }
+
+rglm <- function(formula, data, cluster){
+    fit <- glm(formula = formula, family = binomial(link = "probit"), data = data)
+    coeftest(fit, vcov. = vcovCL(fit, cluster = data[[cluster]], type = "HC0"))
+}

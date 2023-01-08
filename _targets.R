@@ -8,7 +8,8 @@ tar_option_set(
   packages = c("tibble", "here", "dplyr", "readxl", "readr",
                "igraph", "ggraph", "ggplot2", "tidygraph", 
                "rvest", "ggrepel", "extrafont", "readr", 
-               "lme4", "Matrix"), 
+               "lme4", "Matrix", "lmtest", "sandwich", 
+               "cem", "MatchIt", "estimatr"), 
   format = "rds" # default storage format
 )
 
@@ -396,7 +397,6 @@ list(
         .groups = "drop"
       ) %>% 
       left_join(., party_votes_2018, by = c("KODZASTUP", "ZKRATKAN8"))
-      
   }),
   
   # composition of local government -----------------------
@@ -406,7 +406,7 @@ list(
   }),
   
   tar_target(local_government_parties, {
-    paired_cro %>% 
+    cro_data <- paired_cro %>% 
       # FIXME: reshuffles during the term
       select(municipality_id, party_name) %>% 
       unique() %>% 
@@ -416,6 +416,16 @@ list(
       filter(ZKRATKAN8 != "NK") %>% 
       rename(KODZASTUP = municipality_id) %>% 
       mutate(local_government = 1)
+    
+    missing_loc <- read_excel(here("data", "local_government_missing.xlsx")) %>% 
+      mutate(ZKRATKAN8 = strsplit(ZKRATKAN8, ",")) %>% 
+      tidyr::unnest(., ZKRATKAN8) %>% 
+      mutate(ZKRATKAN8 = stringr::str_trim(ZKRATKAN8), 
+             local_government = 1) %>% 
+      select(-c(NAZ_OBEC, NAZ_CZNUTS3))
+    
+    bind_rows(cro_data, 
+              missing_loc)
   }),
   
   tar_target(ano_in_local_government, {
@@ -844,6 +854,20 @@ list(
           data = final_df)
   }),
   
+  # local_government_dummy
+  tar_target(m5, {
+    glmer(created ~ created_2018 + created_senate + 
+            local_government_dummy + 
+            spolu + pirstan + tss + 
+            coalition_size_votes_norm + I(coalition_size_votes_norm^2) + 
+            asymmetry + 
+            enep_votes + 
+            (1 | KODZASTUP), 
+          family = binomial(link = "probit"), 
+          glmerControl(optimizer = "bobyqa"),
+          data = final_df)
+  }),
+  
   # robustness checks ------------------------------------
   ## with ideological distance ---------------------------
   tar_target(m1b, {
@@ -898,6 +922,94 @@ list(
           family = binomial(link = "probit"), 
           glmerControl(optimizer = "bobyqa"),
           data = final_df)
+  }),
+  
+  tar_target(m5b, {
+    glmer(created ~ created_2018 + created_senate + 
+            local_government_dummy + 
+            spolu + pirstan + 
+            coalition_size_votes_norm + I(coalition_size_votes_norm^2) + 
+            diff_lrgen + 
+            asymmetry + 
+            enep_votes + 
+            (1 | KODZASTUP), 
+          family = binomial(link = "probit"), 
+          glmerControl(optimizer = "bobyqa"),
+          data = final_df)
+  }),
+  
+  tar_target(m6b, {
+    glmer(created ~ created_2018 + created_senate + 
+            spolu + pirstan + 
+            diff_lrgen * local_government_dummy + 
+            coalition_size_votes_norm + I(coalition_size_votes_norm^2) + 
+            asymmetry + 
+            enep_votes + 
+            (1 | KODZASTUP), 
+          family = binomial(link = "probit"), 
+          glmerControl(optimizer = "bobyqa"),
+          data = final_df)
+  }),
+  
+  tar_target(m7b, {
+    glmer(created ~ created_2018 + created_senate + 
+            spolu * local_government_dummy + 
+            coalition_size_votes_norm + I(coalition_size_votes_norm^2) + 
+            asymmetry + 
+            enep_votes + 
+            (1 | KODZASTUP), 
+          family = binomial(link = "probit"), 
+          glmerControl(optimizer = "bobyqa"),
+          data = final_df)
+  }),
+  
+  ## matching senate --------------------------------------
+  tar_target(match_senate1, {
+    matchit(created_senate ~ diff_lrgen + ano_government + spolu_government + 
+              coalition_size_votes_norm + asymmetry + enep_votes + 
+              municipality_size + local_government_dummy, 
+            data = final_df %>% filter(!is.na(diff_lrgen)), 
+            method = "cem")
+  }),
+  
+  tar_target(match_senate_data, {
+    match.data(match_senate1)
+    
+  }),
+  
+  tar_target(match_model1, {
+    lm_robust(created ~ created_senate, data = match_senate_data, 
+              weights = match_senate_data$weights)
+  }),
+  
+  tar_target(match_senate2, {
+    matchit(created_senate ~ diff_lrgen + ano_government + spolu_government + 
+              coalition_size_votes_norm + asymmetry + enep_votes + 
+              municipality_size + local_government_dummy, 
+            k2k = TRUE, 
+            data = final_df %>% filter(!is.na(diff_lrgen)), 
+            method = "cem")
+  }), 
+  
+  tar_target(match_senate_data2, {
+    match.data(match_senate2) %>% 
+      group_by(subclass) %>% 
+      filter(sum(senate_election2022) == 1) %>% 
+      ungroup()
+  }),
+  
+  tar_target(match_senate_data2_summary, {
+    match_senate_data2 %>% 
+      group_by(created_senate) %>% 
+      summarise(across(c(diff_lrgen, ano_government, spolu_government, 
+                       coalition_size_votes_norm, asymmetry, enep_votes, 
+                       municipality_size, local_government_dummy), 
+                       ~mean(.x)))
+  }),
+  
+  tar_target(match_model2, {
+    lm_robust(created ~ created_senate, data = match_senate_data2, 
+              weights = match_senate_data2$weights)
   }),
   
   NULL
