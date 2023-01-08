@@ -1011,9 +1011,5 @@ list(
               weights = match_senate_data2$weights)
   }),
   
-  tar_target(stop, {
-    stopifnot(FALSE)
-  }),
-  
   NULL
 )
