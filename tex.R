@@ -21,26 +21,30 @@ coefs <- c(
     "diff_lrgen:local_government_dummy"="Ideological distance × Same local gov. position",
     "asymmetry"="Asymmetry",
     "enep_votes"="ENEP", 
+    "municipality_size"="Municipality size",
     "(Intercept)"="(Intercept)"
 )
 
-tex <- modelsummary(list(m1, m2, m3, m4), stars = TRUE,
+tex <- modelsummary(list(m1, m2, m3, m4, m5), stars = TRUE,
                     fmt = "%.2f",
                     output = "latex",
                     metrics = "common", 
                     coef_map = coefs)
 writeLines(tex, "output/models1.tex")
 
-tex2 <- modelsummary(list(m1b, m2b, m3b, m4b), stars = TRUE,
+tex2 <- modelsummary(list(m1b, m2b, m3b, m4b, m5b), stars = TRUE,
                     fmt = "%.2f",
                     output = "latex",
                     metrics = "common", 
                     coef_map = coefs)
 writeLines(tex2, "output/models2.tex")
 
-tex3 <- modelsummary(list(m5, m5b, m6b, m7b), stars = TRUE, 
+tar_load(match_model2)
+tar_load(match_model2b)
+
+tex3 <- modelsummary(list(match_model2, match_model2b), 
                      fmt = "%.2f",
-                     # output = "latex",
-                     metrics = "common",
-                     coef_map = coefs
-                     )
+                     output = "latex",
+                     metrics = "common", 
+                     coef_map = coefs)
+writeLines(tex3, "output/matching_models.tex")

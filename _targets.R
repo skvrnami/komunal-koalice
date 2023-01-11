@@ -8,7 +8,8 @@ tar_option_set(
   packages = c("tibble", "here", "dplyr", "readxl", "readr",
                "igraph", "ggraph", "ggplot2", "tidygraph", 
                "rvest", "ggrepel", "extrafont", "readr", 
-               "lme4", "Matrix", "cem", "MatchIt", "estimatr"), 
+               "lme4", "Matrix", "cem", "MatchIt", "estimatr", 
+               "cobalt"), 
   format = "rds" # default storage format
 )
 
@@ -981,6 +982,7 @@ list(
               weights = match_senate_data$weights)
   }),
   
+  # Matching dyads where only in one of them senate election were held
   tar_target(match_senate2, {
     matchit(created_senate ~ diff_lrgen + ano_government + spolu_government + 
               coalition_size_votes_norm + asymmetry + enep_votes + 
@@ -998,18 +1000,35 @@ list(
   }),
   
   tar_target(match_senate_data2_summary, {
-    match_senate_data2 %>% 
-      group_by(created_senate) %>% 
-      summarise(across(c(diff_lrgen, ano_government, spolu_government, 
-                       coalition_size_votes_norm, asymmetry, enep_votes, 
-                       municipality_size, local_government_dummy), 
-                       ~mean(.x)))
+    covs <- match_senate_data2 %>% select(diff_lrgen, ano_government, spolu_government, 
+                                          coalition_size_votes_norm, asymmetry, enep_votes, 
+                                          municipality_size, local_government_dummy)
+    bal.tab(covs, treat = match_senate_data2$created_senate, 
+            weights = match_senate_data2$weights, 
+            disp = "means",
+            stats = c("mean.diffs", "variance.ratios") #, 
+            # thresholds = c(m = .1, v = 2)
+            )
+  }),
+  
+  tar_target(match_senate_data2_summary_tab, {
+    match_senate_data2_summary$Balance %>% 
+      purrr::keep(~!all(is.na(.x))) %>% 
+      knitr::kable(., format = "latex") %>% 
+      writeLines(., "output/cov_balance.tex")
   }),
   
   tar_target(match_model2, {
     lm_robust(created ~ created_senate, data = match_senate_data2, 
               weights = match_senate_data2$weights)
   }),
+  
+  tar_target(match_model2b, {
+    lm_robust(created ~ created_senate + municipality_size, 
+              data = match_senate_data2, 
+              weights = match_senate_data2$weights)
+  }),
+  
   
   NULL
 )
