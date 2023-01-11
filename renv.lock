@@ -298,6 +298,21 @@
       "Hash": "3f038e5ac7f41d4ac41ce658c85e3042",
       "Requirements": []
     },
+    "cobalt": {
+      "Package": "cobalt",
+      "Version": "4.4.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "0b006bcddf1b9d0e8059090defb74227",
+      "Requirements": [
+        "backports",
+        "crayon",
+        "ggplot2",
+        "gridExtra",
+        "gtable",
+        "rlang"
+      ]
+    },
     "codetools": {
       "Package": "codetools",
       "Version": "0.2-18",
