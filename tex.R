@@ -29,6 +29,7 @@ tex <- modelsummary(list(m1, m2, m3, m4, m5), stars = TRUE,
                     fmt = "%.2f",
                     output = "latex",
                     metrics = "common", 
+                    # stars = TRUE,
                     coef_map = coefs)
 writeLines(tex, "output/models1.tex")
 
@@ -46,5 +47,6 @@ tex3 <- modelsummary(list(match_model2, match_model2b),
                      fmt = "%.2f",
                      output = "latex",
                      metrics = "common", 
+                     stars = TRUE,
                      coef_map = coefs)
 writeLines(tex3, "output/matching_models.tex")
