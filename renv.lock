@@ -710,10 +710,10 @@
     },
     "insight": {
       "Package": "insight",
-      "Version": "0.17.1",
+      "Version": "0.18.8",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "1ce0d9c527482d41e0f36e9217847674",
+      "Hash": "63e5c0b19f7a78e13cda42e1c3b03549",
       "Requirements": []
     },
     "isoband": {

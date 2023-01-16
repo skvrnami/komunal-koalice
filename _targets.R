@@ -687,6 +687,30 @@ list(
     stopifnot(nrow(final_df) == nrow(possible_dyads_2022))
   }),
   
+  tar_target(desc_table, {
+    tmp <- final_df %>% 
+      group_by(created) %>% 
+      select(created, created_2018, spolu, pirstan, tss, created_senate, 
+             ano_government, spolu_government, coalition_size_votes_norm, 
+             diff_lrgen, local_government_dummy, asymmetry, enep_votes) %>% 
+      summarise_all(list(mean = mean, sd = sd), na.rm = TRUE) %>% 
+      tidyr::pivot_longer(., cols = 2:ncol(.)) %>% 
+      mutate(type = gsub("_", "", stringr::str_extract(name, "_sd|_mean")), 
+             name = gsub("_sd|_mean", "", name)) %>% 
+      tidyr::pivot_wider(., id_cols = c("created", "name"), 
+                         names_from = "type", values_from = "value")
+    
+    left_join(
+      tmp %>% filter(created == 1) %>% 
+        rename(mean_pec = mean, sd_pec = sd) %>% 
+        select(-created), 
+      tmp %>% filter(created == 0) %>% 
+        rename(mean_no_pec = mean, sd_no_pec = sd) %>% 
+        select(-created), 
+      by = "name"
+    )
+  }),
+  
   # charts ------------------------------------------------
   
   tar_target(diff_parl_coalitions, {
@@ -868,6 +892,19 @@ list(
           data = final_df)
   }),
   
+  tar_target(m6, {
+    glmer(created ~ created_2018 + created_senate + 
+            local_government_fct + 
+            spolu + pirstan + tss + 
+            coalition_size_votes_norm + I(coalition_size_votes_norm^2) + 
+            asymmetry + 
+            enep_votes + 
+            (1 | KODZASTUP), 
+          family = binomial(link = "probit"), 
+          glmerControl(optimizer = "bobyqa"),
+          data = final_df)
+  }),
+  
   # robustness checks ------------------------------------
   ## with ideological distance ---------------------------
   tar_target(m1b, {
@@ -967,7 +1004,7 @@ list(
   tar_target(match_senate1, {
     matchit(created_senate ~ diff_lrgen + ano_government + spolu_government + 
               coalition_size_votes_norm + asymmetry + enep_votes + 
-              municipality_size + local_government_dummy, 
+              municipality_size + local_government_dummy + created_2018, 
             data = final_df %>% filter(!is.na(diff_lrgen)), 
             method = "cem")
   }),
@@ -986,7 +1023,7 @@ list(
   tar_target(match_senate2, {
     matchit(created_senate ~ diff_lrgen + ano_government + spolu_government + 
               coalition_size_votes_norm + asymmetry + enep_votes + 
-              municipality_size + local_government_dummy, 
+              municipality_size + local_government_dummy + created_2018, 
             k2k = TRUE, 
             data = final_df %>% filter(!is.na(diff_lrgen)), 
             method = "cem")
