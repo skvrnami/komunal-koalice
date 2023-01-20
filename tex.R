@@ -1,4 +1,7 @@
 library(targets)
+library(sjPlot)
+library(ggplot2)
+library(coefplot)
 library(modelsummary)
 
 tar_load(matches("m[1-7]{1}"))
@@ -74,3 +77,32 @@ tex3 <- modelsummary(list(match_model2, match_model2b),
                      stars = TRUE,
                      coef_map = coefs)
 writeLines(tex3, "output/matching_models.tex")
+
+plot_model(m5, show.values = TRUE, value.offset = .3)
+coefplot(m4, 
+         newNames = c("tssTRUE"="TSS", "pirstanTRUE"="PirSTAN", "spoluTRUE"="Spolu", 
+                      "enep_votes"="ENEP", "asymmetry"="Asymmetry", 
+                      "spolu_governmentTRUE"="Spolu party in local government", 
+                      "created_senate"="PEC in Senate election (2022)", 
+                      "created_2018"="PEC in local election (2018)", 
+                      "coalition_size_votes_norm"="Coalition size", 
+                      "I(coalition_size_votes_norm^2)"="Coalition size (sq.)", 
+                      "spoluTRUE:spolu_governmentTRUE"="Spolu x Spolu in local government"), 
+         intercept = FALSE, 
+         plot = FALSE) %>% 
+    # as.data.frame() %>% 
+    filter(Coefficient %in% c("Spolu", "PirSTAN", "TSS", 
+                             "PEC in Senate election (2022)", 
+                             "Spolu x Spolu in local government")) %>% 
+    ggplot(., aes(y = factor(Coefficient, levels = rev(c("Spolu", "PirSTAN", "TSS", 
+                             "PEC in Senate election (2022)", 
+                             "Spolu x Spolu in local government"))), x = Value)) + 
+    geom_point() + 
+    geom_linerange(aes(xmin = LowOuter, xmax = HighOuter)) + 
+    # scale_y_discrete(breaks = c("(Intercept)", "Spolu")) + 
+    geom_vline(xintercept = 0, colour = "gray40") + 
+    theme_bw() +
+    labs(x = "", y = "Coefficients", title = "Coefficient plot", 
+         caption = "Note: Horizontal lines indicate 95% confidence interval. Control variables not shown.")
+
+ggsave("output/coef_plot.png", width = 8, height = 4)    
