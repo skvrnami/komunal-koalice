@@ -68,12 +68,22 @@ baseline_models <- modelsummary(list(m0, m0b, m1, m1b), stars = TRUE,
                                 coef_map = coefs)
 writeLines(baseline_models, "paper/baseline_models.tex")
 
-tex <- modelsummary(list(m2, m3_kscm, m4, m5), stars = TRUE,
+tab_model(list("Model 1" = m0, "Model 2" = m0b, 
+               "Model 3" = m1, "Model 4" = m1b), 
+          pred.labels = c("Model 1", "Model 2", "Model 3", "Model 4"),
+          show.p = FALSE)
+
+tex <- modelsummary(list(m2, m3_kscm, m4, m5), stars = FALSE,
                     fmt = "%.2f",
                     output = "latex",
                     metrics = "common", 
                     coef_map = coefs)
 writeLines(tex, "paper/models1.tex")
+
+tab_model(list(m2, m3_kscm, m4, m5), 
+          # pred.labels = c("Model 1", "Model 2", "Model 3", "Model 4"),
+          show.p = FALSE)
+
 
 tex2 <- modelsummary(list(m2b, m3b_kscm, m4b, m5b), stars = TRUE,
                     fmt = "%.2f",
