@@ -9,7 +9,7 @@ tar_option_set(
                "igraph", "ggraph", "ggplot2", "tidygraph", 
                "rvest", "ggrepel", "extrafont", "readr", 
                "lme4", "Matrix", "cem", "MatchIt", "estimatr", 
-               "cobalt"), 
+               "cobalt", "optimx"), 
   format = "rds" # default storage format
 )
 
@@ -104,7 +104,71 @@ list(
   }),
   
   # vote share in PS 2021
+  tar_target(
+    psp_2021, {
+      readRDS("data/psp_2021.rds") %>% 
+        filter(
+          nazev_strk %in% c("SPOLU – ODS, KDU-ČSL, TOP 09", 
+                            "Trikolora Svobodní Soukromníci", 
+                            "PIRÁTI a STAROSTOVÉ")) %>% 
+        select(kod_zastup, nazev_strk, proc_hlasu) %>% 
+        mutate(proc_hlasu = as.numeric(proc_hlasu)) %>% 
+        group_by(nazev_strk) %>% 
+        mutate(proc_hlasu_center = proc_hlasu - mean(proc_hlasu), 
+               proc_hlasu_norm = proc_hlasu_center / sd(proc_hlasu)) %>% 
+        ungroup
+    }
+  ),
   
+  # vote share in PS 2017
+  tar_target(
+    psp_2017, {
+      readRDS("data/psp_2017.rds") %>% 
+        mutate(koalice = case_when(
+          nazev_strk %in% c("Občanská demokratická strana", 
+                            "TOP 09", "Křesťan.a demokrat.unie-Českosl.strana lidová") ~ "SPOLU", 
+          nazev_strk %in% c("STAROSTOVÉ A NEZÁVISLÍ", 
+                            "Česká pirátská strana") ~ "PirSTAN", 
+          nazev_strk == "Strana svobodných občanů" ~ "TSS",
+          TRUE ~ "Ostatní"
+        ), 
+        hlasy = as.numeric(hlasy)
+        ) %>% 
+          group_by(koalice, kod_zastup) %>% 
+          summarise(hlasy = sum(hlasy)) %>% 
+          ungroup %>% 
+          group_by(kod_zastup) %>% 
+          mutate(proc_hlasu = round(hlasy / sum(hlasy) * 100, 2)) 
+    }
+  ),
+  
+  tar_target(
+    psp_21_17_comparison, {
+      psp_2021 %>% 
+        mutate(koalice = case_when(
+          nazev_strk == "Trikolora Svobodní Soukromníci" ~ "TSS", 
+          nazev_strk == "SPOLU – ODS, KDU-ČSL, TOP 09" ~ "SPOLU", 
+          nazev_strk == "PIRÁTI a STAROSTOVÉ" ~ "PirSTAN"
+        )) %>% 
+        select(koalice, kod_zastup, proc_hlasu) %>% 
+        left_join(., psp_2017 %>% select(koalice, kod_zastup, proc_hlasu), 
+                  by = c("koalice", "kod_zastup"),
+                  suffix = c("_2021", "_2017")) %>% 
+        mutate(proc_hlasu_2017 = if_else(is.na(proc_hlasu_2017), 
+                                         0, proc_hlasu_2017)) %>% 
+        mutate(pct_change = proc_hlasu_2021 - proc_hlasu_2017) %>%
+        group_by(koalice) %>% 
+        mutate(pct_change_center = pct_change - mean(pct_change, na.rm = TRUE), 
+               pct_change_norm = as.vector(scale(pct_change))) %>% 
+        ungroup() %>% 
+        mutate(spolu = as.numeric(koalice == "SPOLU"),
+               pirstan = as.numeric(koalice == "PirSTAN"),
+               tss = as.numeric(koalice == "TSS")) %>%
+        select(spolu, pirstan, tss, kod_zastup, proc_hlasu_2021,
+               proc_hlasu_2017, pct_change, pct_change_center,
+               pct_change_norm)
+    }
+  ),
   
   # co-occurrence matrices --------------------------------
   
@@ -588,7 +652,7 @@ list(
     PIRSTAN <- c("Piráti", "STAN")
     TSS <- c("Trikolora", "Svobodní", "Soukromníci")
     
-    possible_dyads_2022 %>% 
+    tmp <- possible_dyads_2022 %>% 
       left_join(., created_dyads_2022 %>% mutate(created = 1), 
                 by = c("party1", "party2", "KODZASTUP")) %>% 
       # DV
@@ -732,7 +796,54 @@ list(
              party2 = if_else(party1b < party2b, party2b, party1b)) %>% 
       select(-c(party1b, party2b)) %>% 
       mutate(dyad_name = paste0(party1, "+", party2))
+    
+    spolu <- psp_2021 %>% 
+      filter(nazev_strk == "SPOLU – ODS, KDU-ČSL, TOP 09") %>% 
+      mutate(spolu = 1, 
+             KODZASTUP = as.numeric(kod_zastup)) %>% 
+      select(-c(kod_zastup, nazev_strk)) %>% 
+      rename(spolu_pct = proc_hlasu, 
+             spolu_pct_center = proc_hlasu_center, 
+             spolu_pct_norm = proc_hlasu_norm)
+    
+    tss <- psp_2021 %>% 
+      filter(nazev_strk == "Trikolora Svobodní Soukromníci") %>% 
+      mutate(tss = 1, 
+             KODZASTUP = as.numeric(kod_zastup)) %>% 
+      select(-c(kod_zastup, nazev_strk)) %>% 
+      rename(tss_pct = proc_hlasu, 
+             tss_pct_center = proc_hlasu_center, 
+             tss_pct_norm = proc_hlasu_norm)
+    
+    pirstan <- psp_2021 %>% 
+      filter(nazev_strk == "PIRÁTI a STAROSTOVÉ") %>% 
+      mutate(pirstan = 1, 
+             KODZASTUP = as.numeric(kod_zastup)) %>% 
+      select(-c(kod_zastup, nazev_strk)) %>% 
+      rename(pirstan_pct = proc_hlasu, 
+             pirstan_pct_center = proc_hlasu_center, 
+             pirstan_pct_norm = proc_hlasu_norm)
+    
+    tmp %>% 
+      left_join(., spolu, by = c("KODZASTUP", "spolu")) %>% 
+      left_join(., tss, by = c("KODZASTUP", "tss")) %>% 
+      left_join(., pirstan, by = c("KODZASTUP", "pirstan")) %>% 
+      select(dyad_name, created, starts_with("spolu"), 
+             starts_with("tss"), starts_with("pirstan"), 
+             everything()) %>% 
+      mutate(across(matches("^(spolu|tss|pirstan)_pct"), ~if_else(is.na(.x), 0, .x)))
   }),
+  
+  tar_target(
+    final_df_results, 
+    final_df %>% 
+      left_join(., psp_21_17_comparison %>% mutate(kod_zastup = as.numeric(kod_zastup)),
+                by = c("KODZASTUP"="kod_zastup", "spolu", "tss", "pirstan")) %>% 
+      mutate(across(c(proc_hlasu_2021, proc_hlasu_2017, pct_change, 
+                      pct_change_center, pct_change_norm), 
+                    ~if_else(is.na(.x), 0, .x))) %>% 
+      mutate(coalition = tss + spolu + pirstan)
+  ),
   
   tar_target(checks, {
     stopifnot(nrow(final_df) == nrow(possible_dyads_2022))
@@ -917,22 +1028,22 @@ list(
   # # models ---------------------------------------
   tar_target(m0, {
     glmer(created ~ created_2018 +
-            coalition_size_votes_norm + I(coalition_size_votes_norm^2) +
+            coalition_size_votes + I(coalition_size_votes_norm^2) +
             coalition_size_votes_norm * asymmetry +
             enep_votes + municipality_seats + 
-            (1 | KODZASTUP) + (1 | dyad_name),
+            (1 | KODZASTUP),
           family = binomial(link = "probit"),
           glmerControl(optimizer = "bobyqa"),
           data = final_df)
   }),
-
+  
   tar_target(m1, {
     glmer(created ~ created_2018 +
             spolu + pirstan + tss +
             coalition_size_votes_norm + I(coalition_size_votes_norm^2) +
             coalition_size_votes_norm * asymmetry +
             enep_votes + municipality_seats + 
-            (1 | KODZASTUP) + (1 | dyad_name),
+            (1 | KODZASTUP),
           family = binomial(link = "probit"),
           glmerControl(optimizer = "bobyqa"),
           data = final_df)
@@ -944,12 +1055,12 @@ list(
             coalition_size_votes_norm + I(coalition_size_votes_norm^2) +
             coalition_size_votes_norm * asymmetry +
             enep_votes + municipality_seats + 
-            (1 | KODZASTUP) + (1 | dyad_name),
+            (1 | KODZASTUP),
           family = binomial(link = "probit"),
           glmerControl(optimizer = "bobyqa"),
           data = final_df)
   }),
-
+  
   tar_target(m3, {
     glmer(created ~ created_2018 + created_senate +
             spolu * ano_government +
@@ -957,12 +1068,12 @@ list(
             coalition_size_votes_norm + I(coalition_size_votes_norm^2) +
             coalition_size_votes_norm * asymmetry +
             enep_votes + municipality_seats + 
-            (1 | KODZASTUP) + (1 | dyad_name),
+            (1 | KODZASTUP),
           family = binomial(link = "probit"),
           glmerControl(optimizer = "bobyqa"),
           data = final_df)
   }),
-
+  
   tar_target(m3_kscm, {
     glmer(created ~ created_2018 + created_senate +
             spolu * ano_government +
@@ -971,12 +1082,12 @@ list(
             coalition_size_votes_norm + I(coalition_size_votes_norm^2) +
             coalition_size_votes_norm * asymmetry +
             enep_votes + municipality_seats + 
-            (1 | KODZASTUP) + (1 | dyad_name),
+            (1 | KODZASTUP),
           family = binomial(link = "probit"),
           glmerControl(optimizer = "bobyqa"),
           data = final_df)
   }),
-
+  
   tar_target(m3_left, {
     glmer(created ~ created_2018 + created_senate +
             spolu * ano_government +
@@ -985,12 +1096,12 @@ list(
             coalition_size_votes_norm + I(coalition_size_votes_norm^2) +
             coalition_size_votes_norm * asymmetry +
             enep_votes + municipality_seats + 
-            (1 | KODZASTUP) + (1 | dyad_name),
+            (1 | KODZASTUP),
           family = binomial(link = "probit"),
           glmerControl(optimizer = "bobyqa"),
           data = final_df)
   }),
-
+  
   tar_target(m4, {
     glmer(created ~ created_2018 + created_senate +
             spolu * spolu_government +
@@ -998,12 +1109,12 @@ list(
             coalition_size_votes_norm + I(coalition_size_votes_norm^2) +
             coalition_size_votes_norm * asymmetry +
             enep_votes + municipality_seats + 
-            (1 | KODZASTUP) + (1 | dyad_name),
+            (1 | KODZASTUP),
           family = binomial(link = "probit"),
           glmerControl(optimizer = "bobyqa"),
           data = final_df)
   }),
-
+  
   # local_government_dummy
   tar_target(m5, {
     glmer(created ~ created_2018 + created_senate +
@@ -1012,12 +1123,12 @@ list(
             coalition_size_votes_norm + I(coalition_size_votes_norm^2) +
             coalition_size_votes_norm * asymmetry +
             enep_votes + municipality_seats + 
-            (1 | KODZASTUP) + (1 | dyad_name),
+            (1 | KODZASTUP),
           family = binomial(link = "probit"),
           glmerControl(optimizer = "bobyqa"),
           data = final_df)
   }),
-
+  
   tar_target(m6, {
     glmer(created ~ created_2018 + created_senate +
             local_government_fct +
@@ -1025,6 +1136,119 @@ list(
             coalition_size_votes_norm + I(coalition_size_votes_norm^2) +
             coalition_size_votes_norm * asymmetry +
             enep_votes + municipality_seats + 
+            (1 | KODZASTUP),
+          family = binomial(link = "probit"),
+          glmerControl(optimizer = "bobyqa"),
+          data = final_df)
+  }),
+  
+  # models with RE for dyad -------------------------------
+  # TODO: ps 2021 results
+  
+  tar_target(m0_dyad, {
+    glmer(created ~ created_2018 +
+            log1p(coalition_size_votes) + 
+            log1p(coalition_size_votes) * asymmetry +
+            enep_votes + # log1p(municipality_seats) + 
+            (1 | KODZASTUP) + (1 | dyad_name),
+          family = binomial(link = "probit"),
+          glmerControl(optimizer = "bobyqa"),
+          data = final_df)
+  }),
+
+  tar_target(m1_dyad, {
+    glmer(created ~ created_2018 +
+            spolu + pirstan + tss +
+            log1p(coalition_size_votes) + 
+            log1p(coalition_size_votes) * asymmetry +
+            enep_votes + # log1p(municipality_seats) + 
+            (1 | KODZASTUP) + (1 | dyad_name),
+          family = binomial(link = "probit"),
+          glmerControl(optimizer = "bobyqa"),
+          data = final_df)
+  }),
+  
+  tar_target(m2_dyad, {
+    glmer(created ~ created_2018 + created_senate +
+            spolu + pirstan + tss +
+            log1p(coalition_size_votes) + 
+            log1p(coalition_size_votes) * asymmetry +
+            enep_votes + # log1p(municipality_seats) + 
+            (1 | KODZASTUP) + (1 | dyad_name),
+          family = binomial(link = "probit"),
+          glmerControl(optimizer = "bobyqa"),
+          data = final_df)
+  }),
+
+  tar_target(m3_dyad, {
+    glmer(created ~ created_2018 + created_senate +
+            spolu * ano_government +
+            pirstan + tss +
+            log1p(coalition_size_votes) + 
+            log1p(coalition_size_votes) * asymmetry +
+            enep_votes + # log1p(municipality_seats) + 
+            (1 | KODZASTUP) + (1 | dyad_name),
+          family = binomial(link = "probit"),
+          glmerControl(optimizer = "bobyqa"),
+          data = final_df)
+  }),
+  
+  tar_target(m3_dyad_all, 
+             allFit(m3_dyad, as.matrix(data.frame(optimizer = c("bobyqa", "Nelder_Mead", "optimx", "nloptwrap", "nloptwrap"), method = c("", "", "L-BFGS-B", "NLOPT_LN_NELDERMEAD", "NLOPT_LN_BOBYQA"))))
+  ),
+
+  tar_target(m3_kscm_dyad, {
+    glmer(created ~ created_2018 + created_senate +
+            # spolu * ano_government +
+            spolu * kscm_government +
+            pirstan + tss +
+            log1p(coalition_size_votes) + 
+            log1p(coalition_size_votes) * asymmetry +
+            enep_votes + # log1p(municipality_seats) + 
+            (1 | KODZASTUP) + (1 | dyad_name),
+          family = binomial(link = "probit"),
+          glmerControl(optimizer = "bobyqa"),
+          data = final_df)
+  }),
+  
+  tar_target(m3_kscm_dyad_all, 
+             allFit(m3_kscm_dyad, as.matrix(data.frame(optimizer = c("bobyqa", "Nelder_Mead", "optimx", "nloptwrap", "nloptwrap"), method = c("", "", "L-BFGS-B", "NLOPT_LN_NELDERMEAD", "NLOPT_LN_BOBYQA"))))
+  ),
+
+  tar_target(m4_dyad, {
+    glmer(created ~ created_2018 + created_senate +
+            spolu * spolu_government +
+            pirstan + tss +
+            log1p(coalition_size_votes) + 
+            log1p(coalition_size_votes) * asymmetry +
+            enep_votes + # log1p(municipality_seats) + 
+            (1 | KODZASTUP) + (1 | dyad_name),
+          family = binomial(link = "probit"),
+          glmerControl(optimizer = "bobyqa"),
+          data = final_df)
+  }),
+
+  # local_government_dummy
+  tar_target(m5_dyad, {
+    glmer(created ~ created_2018 + created_senate +
+            local_government_dummy +
+            spolu + pirstan + tss +
+            log1p(coalition_size_votes) + 
+            log1p(coalition_size_votes) * asymmetry +
+            enep_votes + # log1p(municipality_seats) + 
+            (1 | KODZASTUP) + (1 | dyad_name),
+          family = binomial(link = "probit"),
+          glmerControl(optimizer = "bobyqa"),
+          data = final_df)
+  }),
+
+  tar_target(m6_dyad, {
+    glmer(created ~ created_2018 + created_senate +
+            local_government_fct +
+            spolu + pirstan + tss +
+            log1p(coalition_size_votes) + 
+            log1p(coalition_size_votes) * asymmetry +
+            enep_votes + #log1p(municipality_seats) + 
             (1 | KODZASTUP) + (1 | dyad_name),
           family = binomial(link = "probit"),
           glmerControl(optimizer = "bobyqa"),

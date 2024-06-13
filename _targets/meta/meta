@@ -4,7 +4,7 @@ candidates_2018|stem|ab6186175bc21070|319980613b3e6198|5f399c7a4c1da54f|-8432164
 candidates_2022|stem|d3551ad0208ceb64|21b6ef7d98030a91|5f399c7a4c1da54f|1689375485||t19858.7881573148s|c9bb8446695fde37|5491426|rds|local|vector|||4.828|There were 2 warnings in mutate.The first warning wasℹ In argument JMENO  ifelse....Caused by warning in stri_trans_totitle A resource bundle lookup returned a result either from the root or the default locale.ℹ Run dplyrlast_dplyr_warnings to see the 1 remaining warning.|
 candidates_stats_2018|stem|5896a033caa3ca12|d3713da33902983a|000eb267f10cbae3|-1974703905||t19858.7882275746s|46ffe7b30bad7f69|99649|rds|local|vector|||0.205||
 categorize_titles|function|120168d17d9b4ae7|||||||||||||||
-checks|stem|95c869582cc88ef6|8b9545c8c95a27b5|0a3f2f26497cdcab|1672818241||t19859.3416626555s|e255484007059372|43|rds|local|vector|||0.001||
+checks|stem|95c869582cc88ef6|8b9545c8c95a27b5|a678725ddca8bef8|1672818241||t19859.4968744349s|e255484007059372|43|rds|local|vector|||0.001||
 ches_correlations|stem|5e29027216eb7ba9|67c2b1e01c38cff8|2c530c1562a7fbd1|81843752||t19859.3335288115s|03d0c2cbf5aa332b|54|rds|local|vector|||0.099||
 ches_data|stem|dcc44f92fd9afd08|a36ead78d5871a96|2c530c1562a7fbd1|1800914958||t19859.3335275096s|0f70dd7090ffbd55|728|rds|local|vector|||1.597||
 city_districts|stem|0cea6c5868c97992|d6410877e443f3ad|2c530c1562a7fbd1|-1543635143||t19858.7879811362s|053d1b14d4a04014|2237|rds|local|vector|||0.82||
@@ -27,23 +27,24 @@ create_dyad|function|b51d9378110f7a78|||||||||||||||
 created_dyads_2018|stem|4f8c5198374877cc|2b9f1b8450c0bd5c|37b31a7eae0b38bd|1663307253||t19858.7881985033s|4f581a6df98fdde8|1745|rds|local|vector|||0.769||
 created_dyads_2022|stem|4bc99d3492f50419|edd54748f1a526dc|3fe6c0758e6cdf1b|2059687719||t19858.7881895577s|c7a0f712cfa9e44c|2601|rds|local|vector|||1.277||
 cssd_change|stem|2f4566e9bf0bb231|78ae24c21b38259c|0525583c44089de2|925899821||t19858.7882287247s|fed8ce58542d9c7c|167|rds|local|vector|||0.006||
-desc_table|stem|2e18b71af04811f5|56bbe0d84c1bfff2|37727ea3f1f4876a|-656992260||t19859.3479647826s|bd73dde58a4376d4|762|rds|local|vector|||0.076||
-diff_euclid_chart|stem|f6eff2fff0c11a16|7672af72abe237db|37727ea3f1f4876a|-1703033278||t19859.3474998219s|28c5c6490f9a5e3a|3299598|rds|local|vector|||0.004||
-diff_galtan_chart|stem|a31e3a48abcc1ef2|a4b11439cc43ecaf|37727ea3f1f4876a|1321869179||t19859.3449785933s|6c4256a0e080db73|3299579|rds|local|vector|||0.011||
-diff_local_government|stem|697d6078083bf996|2ea127ef6199add2|37727ea3f1f4876a|1504865221||t19859.3335374387s|4b382a2137a7769a|1044528|rds|local|vector|||0.028||
-diff_lrecon_chart|stem|4ca9f3bae611d73d|54b0d6086d9d426e|37727ea3f1f4876a|101188346||t19859.3335461268s|52e65142f47e9136|3294326|rds|local|vector|||0.005||
-diff_lrgen_chart|stem|5dddbeb938c05896|cdcf48f584fbf18b|37727ea3f1f4876a|349574072||t19859.3462913844s|a2b798f10fe6400c|3299577|rds|local|vector|||0.004||
-diff_parl_coalitions|stem|e88edfe0eed66ff8|eefb85ccaaa48427|37727ea3f1f4876a|1170148708||t19859.3335551794s|3753c0ceb93e9945|1044510|rds|local|vector|||0.016||
+desc_table|stem|2e18b71af04811f5|56bbe0d84c1bfff2|8d980f12e11ff870|-656992260||t19859.500979122s|bd73dde58a4376d4|762|rds|local|vector|||0.075||
+diff_euclid_chart|stem|d19381aac69c6894|7672af72abe237db|8d980f12e11ff870|-1703033278||t19859.4844406954s|ccbadf43313ffe25|3390301|rds|local|vector|||0.011||
+diff_galtan_chart|stem|c689b4bebbe20106|a4b11439cc43ecaf|8d980f12e11ff870|1321869179||t19859.4992906916s|32f87aaacb999fbe|3390283|rds|local|vector|||0.004||
+diff_local_government|stem|937e04267c5ca0ee|2ea127ef6199add2|8d980f12e11ff870|1504865221||t19859.4994638268s|d86092f91f3e4b53|1078491|rds|local|vector|||0.016||
+diff_lrecon_chart|stem|6ec88c901e40da6a|54b0d6086d9d426e|8d980f12e11ff870|101188346||t19859.4948343487s|919dfc2af5fbc373|3390286|rds|local|vector|||0.004||
+diff_lrgen_chart|stem|596cb1ead430d60b|cdcf48f584fbf18b|8d980f12e11ff870|349574072||t19859.4992999261s|9f191194e27396ff|3390282|rds|local|vector|||0.008||
+diff_parl_coalitions|stem|804812613cc0e2fe|eefb85ccaaa48427|8d980f12e11ff870|1170148708||t19859.5009781651s|af584b7e50e576f8|1078514|rds|local|vector|||0.023||
 dyad_desc_table|stem||da7a80223b82d557|38e652552d2514ef|352322172||t19858.8484815714s||0|rds|local|vector|||0.757||no applicable method for mutate applied to an object of class NULL
-dyad_heatmap|stem|4d767d1f53de0bfa|65c530a2af22250c|37727ea3f1f4876a|-224148119||t19859.3393864457s|93554b5fbd75bbf3|1069487|rds|local|vector|||0.096||
-dyad_heatmap_png|stem|d8b7f900b1c7c402|1956063dd40675c9|e2314a1038267b71|275639832||t19859.3481878875s|a057b906461a46f0|75|rds|local|vector|||0.233||
+dyad_heatmap|stem|844931a04f39390d|65c530a2af22250c|8d980f12e11ff870|-224148119||t19859.4951769603s|961a6476b3082d37|1095695|rds|local|vector|||0.098||
+dyad_heatmap_png|stem|d8b7f900b1c7c402|1956063dd40675c9|08dc5b54c27ca47a|275639832||t19859.5024527989s|a057b906461a46f0|75|rds|local|vector|||0.246||
 eligible_comparison|stem|7655827b8f3e4ead|77aee8780773d386|5ecc3f5aab1d78fc|2135221415||t19858.788227748s|b3e070e147e68c13|5864|rds|local|vector|||0.008||
 eligible_municipalities_2018|stem|1dc6a7863fcbbfde|3dc04c3f4bfc2c10|feecf9a289471d31|1144853486||t19858.7881677461s|dbe0af41cc180c54|3765|rds|local|vector|||0.029||
 eligible_municipalities_2022|stem|b70addcde6a9c994|42d353a42d7240ec|9aed7ad1b73bbf50|357845639||t19858.788168143s|db836e11be04119c|2688|rds|local|vector|||0.03||
 eligible_municipalities_2parties_and_more|stem|7223e8beb37dd81b|24e58ba3af541051|9aed7ad1b73bbf50|563395433||t19858.7881673418s|535ce48fd4b06915|3958|rds|local|vector|||0.168||
 enep|stem|47346702c7b42207|1c1da0479dec1331|2c530c1562a7fbd1|1915208936||t19858.7881625784s|068231dc0ce12d3b|68329|rds|local|vector|||0.342||
 file|object|1c616133b44d1aeb|||||||||||||||
-final_df|stem|66baab8d3486758b|484b2e3d98d0761b|305b26602a5672ef|-564487796||t19859.3335339743s|3ea56a7c14d3126b|769497|rds|local|vector|||0.238||
+final_df|stem|773e4afd48df60ab|e40157b996b25645|d0e5d5c23f6d1d81|-564487796||t19859.4844315317s|942385f19a3c946a|787336|rds|local|vector|||0.279||
+final_df_results|stem|f0f7c66d7b7aac93|e42f0c7f925c751e|214d232b2bf6b0e9|-1996958105||t19876.5816844755s|3bbafb0c90a4672e|815401|rds|local|vector|||0.035||
 kv_2018|stem|0eaf6cde708947c3|7146c786fd494acd|dcda27dfa08f47d7|-119816568||t19330.6369500453s|d765ef1e91d18ea8|5977881|rds|local|vector|||5.14||
 kv_2022|stem|85657930574c518d|a1e2e5ab1c684f22|dcda27dfa08f47d7|776202792||t19330.6390310876s|9b052da79ee9a700|5491426|rds|local|vector|||4.675||
 kv_slozeni_2018|stem|aa4fa56dcf416179|c1a6ae3cb9a9e86b|770fc9b3beb45e88|-253755753||t19337.6672215405s|6ced00c29837a61d|290800|rds|local|vector|||1.124||
@@ -68,39 +69,51 @@ log_m5b|stem|ef7d55985c4ade34|471f92644e78c7bb|39f2b305e4fc93da|-4698635||t19858
 log_m6|stem|88c93fe974e37ed4|d70e5532a3c29f9a|39f2b305e4fc93da|1630784740||t19858.7967302483s|9bf81a2466273d36|2700402|rds|local|vector|||25.78||
 log_m6b|stem|db87307e1945b184|d80a232a1a0a96ee|39f2b305e4fc93da|1773081814||t19858.7964275357s|a3aeb496e83145ba|2341284|rds|local|vector|||13.808||
 log_m7b|stem|e913189c961326a8|ce09a4baa1e14c47|39f2b305e4fc93da|-1524263097||t19858.7948961979s|fcd5fcde8cf96f5a|2694528|rds|local|vector|||18.718||
-m0|stem|58fd98b51bcd6181|c7804c59a09b7674|37727ea3f1f4876a|540857696||t19859.3815266216s|2220a041f06a056e|3059950|rds|local|vector|||10.506|Model failed to converge with maxgrad  0.155195 tol  0.002, component 1. Model is nearly unidentifiable very large eigenvalue  Rescale variables|
-m0b|stem|e4ac5de88333e5ff|b6dbdaadcdc52213|37727ea3f1f4876a|-809644935||t19859.3915893592s|4f10117c1b9f449e|2443233|rds|local|vector|||44.332||
-m1|stem|fc024b65fd1b3759|afedde4197750c6f|37727ea3f1f4876a|-110284977||t19859.382846094s|102fd9b54e0d9ab0|3084345|rds|local|vector|||113.61||
+m0|stem|959551a043a898aa|7e950cb3922d881e|8d980f12e11ff870|540857696||t19876.4792038236s|5cc28b204d4e061f|2776698|rds|local|vector|||17.681|Model is nearly unidentifiable very large eigenvalue  Rescale variables|
+m0_dyad|stem|27b8526dabd21998|571da4360fab435b|8d980f12e11ff870|-1489411911||t19876.5190273193s|20e3ba2c97900aa7|2718579|rds|local|vector|||12.98||
+m0b|stem|799ee79091ebeb4d|b6dbdaadcdc52213|8d980f12e11ff870|-809644935||t19859.4948251469s|9695a506c808fe3b|2456747|rds|local|vector|||43.882||
+m1|stem|c49488fbad1ecacb|dab62c0a5f8f51ce|8d980f12e11ff870|-110284977||t19876.4797868105s|65f957726d41a117|2737586|rds|local|vector|||50.008|Model is nearly unidentifiable very large eigenvalue  Rescale variables|
+m1_dyad|stem|5db3a10f4d2c86e9|9642e16402af0c7e|8d980f12e11ff870|422776375||t19876.494465169s|78dfab44aed857c3|2741735|rds|local|vector|||36.617||
 m1_senate|stem|5fc4a8692dbe627b|23efcb303911b8bf|51843528b6913bd2|1432228183||t19355.823472672s|1641d7a7f047e8eb|1791485|rds|local|vector|||15.4|Some predictor variables are on very different scales consider rescaling. Model failed to converge with maxgrad  6.27111 tol  0.002, component 1. Model is nearly unidentifiable very large eigenvalue  Rescale variablesModel is nearly unidentifiable large eigenvalue ratio  Rescale variables|
 m10|stem|ae2b9de91e9ea0f2|0b530c7ebd136f27|d9c089b151153198|1601003855||t19355.8235867702s|087af64d59d2fbe8|1745893|rds|local|vector|||9.62|Model failed to converge with maxgrad  0.0219541 tol  0.002, component 1|
-m1b|stem|8df8335787fc9569|5442571030340304|37727ea3f1f4876a|72601572||t19859.3929774614s|1b686cbb5049fb32|2458630|rds|local|vector|||76.513||
-m2|stem|466b5691a1d111a2|57bbd22039629c72|37727ea3f1f4876a|-1569157453||t19859.3853332051s|3b0c39d6f3ea94dc|3089884|rds|local|vector|||119.458||
+m1b|stem|49da4228cae7b8fb|5442571030340304|8d980f12e11ff870|72601572||t19859.4960785504s|909ff6562a9b81d4|2475861|rds|local|vector|||77.535||
+m2|stem|1d9a2e1fe93516db|d74f0d1441498e87|8d980f12e11ff870|-1569157453||t19876.4803374863s|cd98e98348b64ca3|2744869|rds|local|vector|||47.208|Model is nearly unidentifiable very large eigenvalue  Rescale variables|
 m2_bez_prahy|stem|9d66c64a2bb5493d|53ab31012c14c265|1c02e658907e2869|-20783558||t19355.8232916087s|78e6378138a63e55|1373822|rds|local|vector|||5.159||
-m2b|stem|5f9507320f8e0d3f|ee5d8aca30164c63|37727ea3f1f4876a|-1755716235||t19859.3757037213s|f8e7613bded2bc1c|2463135|rds|local|vector|||11.795|unable to evaluate scaled gradient. Model failed to converge degenerate  Hessian with 1 negative eigenvalues|
-m3|stem|9092fa2c9cfa51a9|e4c026f7a61b42a1|37727ea3f1f4876a|-551534094||t19859.3859861719s|83a8d894aae55e13|3139884|rds|local|vector|||56.012|Model failed to converge with maxgrad  0.120472 tol  0.002, component 1. Model is nearly unidentifiable very large eigenvalue  Rescale variables|
-m3_kscm|stem|bbf7e88e69920f02|96b16fe363802a1e|37727ea3f1f4876a|773186714||t19859.3806090852s|1515067a2a13ed60|3157121|rds|local|vector|||165.523|convergence code 1 from bobyqa bobyqa  maximum number of function evaluations exceeded. Model failed to converge with maxgrad  0.239371 tol  0.002, component 1|
-m3_left|stem|c366d451d07b9132|15aca44f8e86a417|37727ea3f1f4876a|-1660117431||t19859.3814004833s|ebef6a53680e1de2|3188638|rds|local|vector|||67.967|Model failed to converge with maxgrad  0.339858 tol  0.002, component 1. Model is nearly unidentifiable very large eigenvalue  Rescale variablesModel is nearly unidentifiable large eigenvalue ratio  Rescale variables|
-m3b|stem|601d2c388d39f0ae|7cbf1ce04d74474b|37727ea3f1f4876a|-83441928||t19859.377207151s|9ba7a7273c8c895e|2492923|rds|local|vector|||129.537|convergence code 1 from bobyqa bobyqa  maximum number of function evaluations exceeded|
-m3b_kscm|stem|09e9818efaa81395|e2b1a3e48c10f37a|37727ea3f1f4876a|1857276014||t19859.3917502639s|60add5f513822e85|2503007|rds|local|vector|||13.538|unable to evaluate scaled gradient. Model failed to converge degenerate  Hessian with 1 negative eigenvalues|
-m4|stem|69ca98a96ef3ceca|406a33d493cb3ef0|37727ea3f1f4876a|1283437786||t19859.3875257445s|4915a0c77c719831|3174848|rds|local|vector|||132.603||
-m4b|stem|862d322a1785bf21|ea946ca86efbef98|37727ea3f1f4876a|1793862563||t19859.3786886064s|9c7ba83a1bdfe5dc|2516315|rds|local|vector|||127.636||
-m5|stem|f1741f9dcd253ca6|68cbf10253fe4c1e|37727ea3f1f4876a|-1687838615||t19859.3891576622s|29b95e22ea0e52d9|3173633|rds|local|vector|||140.593||
-m5b|stem|4f7d2d7a4f7a6e43|a44915c2e1e626c8|37727ea3f1f4876a|2136317283||t19859.3839459742s|f9c7899104c491be|2499562|rds|local|vector|||94.67||
-m6|stem|81409770d8972e5f|7b5be0adbeeb1c01|37727ea3f1f4876a|-19205607||t19859.3910721323s|fe1acaa524461cc6|3180570|rds|local|vector|||165.001|convergence code 1 from bobyqa bobyqa  maximum number of function evaluations exceeded|
-m6b|stem|4417cadaac1baa99|d9d55bb3504c1651|37727ea3f1f4876a|242564217||t19859.3920877814s|cd4066ba46da1984|2586221|rds|local|vector|||28.795|unable to evaluate scaled gradient. Model failed to converge degenerate  Hessian with 1 negative eigenvalues|
+m2_dyad|stem|f6b73797292d0ee8|f4d900c523db57c4|8d980f12e11ff870|519777975||t19876.4940366242s|5973e46df513ac51|2749380|rds|local|vector|||15.197|Model failed to converge with maxgrad  0.331451 tol  0.002, component 1. Model is nearly unidentifiable very large eigenvalue  Rescale variablesModel is nearly unidentifiable large eigenvalue ratio  Rescale variables|
+m2b|stem|74cff4675baa98fd|ee5d8aca30164c63|8d980f12e11ff870|-1755716235||t19859.4992806777s|1e756b5450ca1e03|2481723|rds|local|vector|||11.693|unable to evaluate scaled gradient. Model failed to converge degenerate  Hessian with 1 negative eigenvalues|
+m3|stem|adffefeccdb95035|0a51e3192ce3bdce|8d980f12e11ff870|-551534094||t19876.4812995905s|a7bba4107ffc7c87|2790433|rds|local|vector|||82.753|Model is nearly unidentifiable very large eigenvalue  Rescale variables|
+m3_dyad|stem|12250318b0af0679|ef82b5e2da91f11c|8d980f12e11ff870|645267179||t19876.4966121598s|085bc2dbfcb161b6|2804291|rds|local|vector|||15.286|unable to evaluate scaled gradient. Model failed to converge degenerate  Hessian with 1 negative eigenvalues|
+m3_dyad_all|stem|b3c0f6779ef2c9ca|af3ae8d3a03ed7ed|4dc89992d42b0a55|-348940999||t19876.5351138112s|b15dbc34daba0be9|12400507|rds|local|vector|||255.143|unable to evaluate scaled gradient. Model failed to converge degenerate  Hessian with 1 negative eigenvalues. Model failed to converge with maxgrad  0.127509 tol  0.002, component 1. Model is nearly unidentifiable very large eigenvalue  Rescale variables. Model failed to converge with maxgrad  0.382312 tol  0.002, component 1. Model failed to converge with maxgrad  0.00594643 tol  0.002, component 1. unable to evaluate scaled gradient. Model failed to converge degenerate  Hessian with 3 negative eigenvalues|
+m3_kscm|stem|40b80e39777f16c8|219a44eb38708520|8d980f12e11ff870|773186714||t19876.487123661s|0131b9a9f3a7a742|2798598|rds|local|vector|||98.112|Model is nearly unidentifiable very large eigenvalue  Rescale variables|
+m3_kscm_dyad|stem|8d085175594ad961|f6777b0aba2579ef|8d980f12e11ff870|1905652490||t19876.5747529181s|36dec2c3e6ce9169|2768205|rds|local|vector|||49.266||
+m3_kscm_dyad_all|stem|67ceb6fc00a30acb|5a7b70d1ca963718|1dab9959b7792796|845027622||t19876.5771024127s|d90fbdead780fb26|10212066|rds|local|vector|||201.924|Model failed to converge with maxgrad  0.123209 tol  0.002, component 1. Model is nearly unidentifiable very large eigenvalue  Rescale variables. convergence code 9999 from optimx none. CHOLMOD warning matrix not positive definite at file Supernodalt_cholmod_super_numeric_worker.c, line 1114. CHOLMOD warning matrix not positive definite at file Supernodalt_cholmod_super_numeric_worker.c, line 1114. Model failed to converge with maxgrad  0.126907 tol  0.002, component 1. Model is nearly unidentifiable very large eigenvalue  Rescale variablesModel is nearly unidentifiable large eigenvalue ratio  Rescale variables. unable to evaluate scaled gradient. Model failed to converge degenerate  Hessian with 1 negative eigenvalues|
+m3_left|stem|c42c52881c3da074|37a7ee453bd5b2eb|8d980f12e11ff870|-1660117431||t19876.4783359317s|a37210223ae5dcb4|2829198|rds|local|vector|||100.902|Model is nearly unidentifiable very large eigenvalue  Rescale variables|
+m3_left_dyad|stem|4b89307759e4d264|e1fbfd5c8d08e660|8d980f12e11ff870|-1099271069||t19876.4949147159s|71b9e7b71e997d4f|2846901|rds|local|vector|||20.268|unable to evaluate scaled gradient. Model failed to converge degenerate  Hessian with 1 negative eigenvalues|
+m3_left_dyad_all|stem|cf0bb1f63208fea5|00bd7adfb86f9bf4|4d1ad9108d7a2612|-605577649||t19876.5280363991s|6fd473ae9d420079|10741580|rds|local|vector|||269.657|unable to evaluate scaled gradient. Model failed to converge degenerate  Hessian with 1 negative eigenvalues. Model failed to converge with maxgrad  0.260447 tol  0.002, component 1. Model is nearly unidentifiable very large eigenvalue  Rescale variablesModel is nearly unidentifiable large eigenvalue ratio  Rescale variables. convergence code 9999 from optimx none. CHOLMOD warning matrix not positive definite at file Supernodalt_cholmod_super_numeric_worker.c, line 1114. CHOLMOD warning matrix not positive definite at file Supernodalt_cholmod_super_numeric_worker.c, line 1114. Model failed to converge with maxgrad  0.0738595 tol  0.002, component 1. unable to evaluate scaled gradient. Model failed to converge degenerate  Hessian with 2 negative eigenvalues|
+m3b|stem|147189a26eef7000|7cbf1ce04d74474b|8d980f12e11ff870|-83441928||t19859.5009744099s|75ba50df0c1c6f41|2511121|rds|local|vector|||130.143|convergence code 1 from bobyqa bobyqa  maximum number of function evaluations exceeded|
+m3b_kscm|stem|aa264d4e0091eb20|e2b1a3e48c10f37a|8d980f12e11ff870|1857276014||t19859.4994603444s|ef20d9798104a3c0|2523192|rds|local|vector|||13.222|unable to evaluate scaled gradient. Model failed to converge degenerate  Hessian with 1 negative eigenvalues|
+m4|stem|ac69d572fcebaf4e|2ed356fed35bdaa1|8d980f12e11ff870|1283437786||t19876.4822998045s|da774f38494f0c4b|2823417|rds|local|vector|||86.047|Model is nearly unidentifiable very large eigenvalue  Rescale variables|
+m4_dyad|stem|dfeb861ed4fffaec|028845fa2638d036|8d980f12e11ff870|-1663445424||t19876.4964306154s|e7896c3fa93a5235|2839376|rds|local|vector|||42.028||
+m4b|stem|a9ab09702fd5ef38|ea946ca86efbef98|8d980f12e11ff870|1793862563||t19859.5024496507s|b11d9e9d8d6140a1|2532141|rds|local|vector|||126.688||
+m5|stem|d4047e999ffdbcf7|ddfeca27a593d9a3|8d980f12e11ff870|-1687838615||t19876.4831821791s|4611920c9cc9e836|2812974|rds|local|vector|||75.855|Model is nearly unidentifiable very large eigenvalue  Rescale variables|
+m5_dyad|stem|25cb56e29ca3b526|c3f1838c8360ae59|8d980f12e11ff870|-610906052||t19876.4959396117s|10a5c67f0e38ee24|2825907|rds|local|vector|||47.604||
+m5b|stem|7d379f157e337b16|a44915c2e1e626c8|8d980f12e11ff870|2136317283||t19859.487040187s|e634f4720320645a|2519188|rds|local|vector|||96.725||
+m6|stem|ce6c774485460731|b876553ad1928d6a|8d980f12e11ff870|-19205607||t19876.4852065095s|abe56a92eee1bb3a|2823259|rds|local|vector|||113.637|convergence code 1 from bobyqa bobyqa  maximum number of function evaluations exceeded. Model failed to converge with maxgrad  0.00923273 tol  0.002, component 1. Model is nearly unidentifiable very large eigenvalue  Rescale variables|
+m6_dyad|stem|800d689704d8bf5b|59377da2a956caa2|8d980f12e11ff870|713728052||t19876.4953839615s|79cf06a1782e4073|2834753|rds|local|vector|||40.126||
+m6b|stem|88244fca59f364fc|d9d55bb3504c1651|8d980f12e11ff870|242564217||t19859.4951724398s|f3179f32509e6e17|2606632|rds|local|vector|||28.832|unable to evaluate scaled gradient. Model failed to converge degenerate  Hessian with 1 negative eigenvalues|
 m7|stem|e1371553274a9899|df4482d85ce32132|04fd85496663dc66|-960687524||t19355.787409739s|9130e22f23a444b8|1215980|rds|local|vector|||5.36||
-m7b|stem|39fc8defe22ecbde|fb83d76ef4768a58|37727ea3f1f4876a|643999545||t19859.3933110359s|4b7041f62d5ca7b6|3177207|rds|local|vector|||28.392|unable to evaluate scaled gradient. Model failed to converge degenerate  Hessian with 3 negative eigenvalues|
+m7b|stem|b344477aa4f517f6|fb83d76ef4768a58|8d980f12e11ff870|643999545||t19859.4972106699s|4f6c0f70c84eee3a|3190984|rds|local|vector|||28.644|unable to evaluate scaled gradient. Model failed to converge degenerate  Hessian with 3 negative eigenvalues|
 m8|stem|46a3ff22fd8dbe82|fd56c31afa6e2540|80aa04cff05f0ce1|877260156||t19355.7874948632s|0c3cdaffd8b14fc6|1251411|rds|local|vector|||7.135||
 m9|stem|38e4b635009af843|87871e6b0d297328|9e232ef6b6d9a1f8|41421273||t19355.8238825761s|0699537ce7a5127d|1721736|rds|local|vector|||7.242||
-match_model1|stem|70213e4dab265d9d|340ebe2c9a643f52|f95e492012ec4561|9456581||t19859.3481892653s|e4a78e368ed47920|37955|rds|local|vector|||0.007||
-match_model2|stem|4fcef40945c7c5ad|157ea2a51bc3d271|9175b8454d394299|-618114807||t19859.3481908302s|1453a58acf0dd45e|17287|rds|local|vector|||0.13||
-match_model2b|stem|fec3b6002494c57a|3a59a7b64eb513c6|c8b3ea57277eb169|-1149804463||t19859.3481913719s|4c0622866a26d615|57457|rds|local|vector|||0.002||
-match_senate_data|stem|aa0fb76f569859e5|4dbdfabebad1cfbd|1f4c2052dea0be23|885343620||t19859.3481884597s|6f5e6b4bb80a87d7|34618|rds|local|vector|||0.008||
-match_senate_data2|stem|3ff922b3491f02e1|6503c5c350c2a4e6|5f5d52522d8557f2|1246741575||t19859.3481890622s|23e1ccbbee5ba424|15640|rds|local|vector|||0.008||
-match_senate_data2_summary|stem|bc003ab4f16e0097|b0fd4decd6022639|c8b3ea57277eb169|-1047001573||t19859.3481911562s|da35f8448c247038|1034|rds|local|vector|||0.023||
+match_model1|stem|87af4eb4e90b91ad|340ebe2c9a643f52|f48bd6e7d61d0415|9456581||t19859.5024532998s|2cca120ff5c71626|40729|rds|local|vector|||0.017||
+match_model2|stem|3a2d35bd36bab057|157ea2a51bc3d271|881b6c76b40c54b6|-618114807||t19859.5024549934s|318331d391ca29a1|18797|rds|local|vector|||0.139||
+match_model2b|stem|35b8635bfa698589|3a59a7b64eb513c6|be4f3c21e8c2a9cd|-1149804463||t19859.502455515s|8d496441d2556760|59004|rds|local|vector|||0.002||
+match_senate_data|stem|79e4d09bc521dad5|4dbdfabebad1cfbd|e5b3fb4dd35b6039|885343620||t19859.5024499144s|315565e71b767a1b|37393|rds|local|vector|||0.005||
+match_senate_data2|stem|c15d5cdf6760f888|6503c5c350c2a4e6|991eb4e176f1cb42|1246741575||t19859.5024529672s|6f732ec325ac3afc|17156|rds|local|vector|||0.008||
+match_senate_data2_summary|stem|bc003ab4f16e0097|b0fd4decd6022639|be4f3c21e8c2a9cd|-1047001573||t19859.502455304s|da35f8448c247038|1034|rds|local|vector|||0.023||
 match_senate_data2_summary_tab|stem|95c869582cc88ef6|fed9bfd90076ba1b|1cba3daf73c75bb4|1896727672||t19858.7967493877s|e255484007059372|43|rds|local|vector|||0.006||
-match_senate1|stem|3b5f2c1cbacb6333|e8065997ee420291|d750acb9506dc8d3|435664744||t19859.3335488688s|4f49378220c19f65|971623|rds|local|vector|||0.034||
-match_senate2|stem|8e19de764154a529|977fdcb7f7897f2e|d750acb9506dc8d3|180102211||t19859.333551881s|2237f4ab8a9ef8a4|972646|rds|local|vector|||0.059||
+match_senate1|stem|941d64997005ec38|e8065997ee420291|967126e257f68aa8|435664744||t19859.4884712798s|144f68ef2515638f|985724|rds|local|vector|||0.067||
+match_senate2|stem|4eb32bf0fcab9d61|977fdcb7f7897f2e|967126e257f68aa8|180102211||t19859.4993030416s|00fe2774a912b4b7|987043|rds|local|vector|||0.057||
 matrix_coalitions_2018|stem|1ab450a004fd6cbc|52a56b18fd0089c4|d27841afb744f47b|-1156389835||t19858.7882296544s|5e9d53203095ada4|1070|rds|local|vector|||0.069||
 matrix_coalitions_2022|stem|aba5f976631941f9|014c30ca129628ef|e51f6e19edea6d95|1733260459||t19858.7882304743s|77051c4d24ce76af|1047|rds|local|vector|||0.068||
 merge_and_recode_titles|function|93369c3e2c2bdcaa|||||||||||||||
@@ -118,6 +131,9 @@ party_municipalities_2018|stem|ce140baccf7c5cbd|6558e33564efc77e|24eecbf02673ac3
 party_municipalities_2022|stem|50a1eeffc3c3f7fc|8b29a5c1bdb4ee9a|64c5ff38c1cfcb0e|-975040624||t19858.7882282247s|fe711bb01b61fd5c|537|rds|local|vector|||0.025||
 pass|function|bedaecc0d0335e3e|||||||||||||||
 possible_dyads_2022|stem|f137d2ff68f1e614|aa05f44dd6ec86c7|3fe6c0758e6cdf1b|-243145654||t19858.7882249718s|90596956f46f44d3|24201|rds|local|vector|||2.274||
+psp_2017|stem|56f5a37bced4a495|c79d156d3eeb3d2f|2c530c1562a7fbd1|-364826048||t19859.5635350303s|55bf3f85e95d89e5|259920|rds|local|vector|||1.618||
+psp_2021|stem|6aae2651d5daeba3|6af3f379d4b08b8a|2c530c1562a7fbd1|617370546||t19859.4844256749s|e4638ab56a47b61b|220468|rds|local|vector|||1.389||
+psp_21_17_comparison|stem|35c21462581ae908|3fbba4948595fc3d|0bca6252542dd767|-1712447087||t19876.5741774728s|6e6759459fafe2a7|324961|rds|local|vector|||0.038||
 read_cns|function|cedd6f84c12e24b5|||||||||||||||
 read_cns_xml|function|04db9fbc537d0c5a|||||||||||||||
 read_cpp|function|0c3961460205553f|||||||||||||||
