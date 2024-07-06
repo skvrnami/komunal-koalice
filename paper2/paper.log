@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.3.11)  16 MAY 2024 17:35
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.3.11)  6 JUL 2024 14:57
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -405,41 +405,133 @@ Package: array 2021/10/04 v2.5f Tabular extension package (FMi)
 \backup@length=\skip69
 \ar@cellbox=\box71
 ))
-\c@remark=\count307
-\c@notation=\count308
+(/usr/local/texlive/2022/texmf-dist/tex/latex/tabularray/tabularray.sty
+Package: tabularray 2022-03-01 v2022A Typeset tabulars and arrays with LaTeX3
+\l__tblr_a_int=\count307
+\l__tblr_c_int=\count308
+\l__tblr_r_int=\count309
+\l__tblr_d_dim=\dimen257
+\l__tblr_h_dim=\dimen258
+\l__tblr_o_dim=\dimen259
+\l__tblr_p_dim=\dimen260
+\l__tblr_q_dim=\dimen261
+\l__tblr_r_dim=\dimen262
+\l__tblr_s_dim=\dimen263
+\l__tblr_t_dim=\dimen264
+\l__tblr_v_dim=\dimen265
+\l__tblr_w_dim=\dimen266
+\l__tblr_a_box=\box72
+\l__tblr_b_box=\box73
+\l__tblr_c_box=\box74
+\l__tblr_d_box=\box75
+\g__tblr_table_count_int=\count310
+\c@rownum=\count311
+\c@colnum=\count312
+\c@rowcount=\count313
+\c@colcount=\count314
+\abovesep=\dimen267
+\belowsep=\dimen268
+\leftsep=\dimen269
+\rightsep=\dimen270
+\g_tblr_level_int=\count315
+\g__tblr_data_row_key_count_int=\count316
+\g__tblr_data_column_key_count_int=\count317
+\g__tblr_data_cell_key_count_int=\count318
+\g__tblr_array_int=\count319
+\l__tblr_key_count_int=\count320
+\l__tblr_key_quotient_int=\count321
+\l__tblr_key_quotient_two_int=\count322
+\l__tblr_key_remainder_int=\count323
+\g__tblr_data_str_value_count_int=\count324
+\rulewidth=\dimen271
+\l__tblr_strut_ht_box=\box76
+\l__tblr_strut_dp_box=\box77
+\g__tblr_cell_wd_dim=\dimen272
+\g__tblr_cell_ht_dim=\dimen273
+\g__tblr_cell_head_dim=\dimen274
+\g__tblr_cell_foot_dim=\dimen275
+\l__column_target_dim=\dimen276
+\l__tblr_caption_box=\box78
+\l__tblr_caption_left_box=\box79
+\l__tblr_row_head_box=\box80
+\l__tblr_row_foot_box=\box81
+\l__tblr_row_head_foot_dim=\dimen277
+\tablewidth=\dimen278
+\l__tblr_table_firsthead_box=\box82
+\l__tblr_table_middlehead_box=\box83
+\l__tblr_table_lasthead_box=\box84
+\l__tblr_table_firstfoot_box=\box85
+\l__tblr_table_middlefoot_box=\box86
+\l__tblr_table_lastfoot_box=\box87
+\l__tblr_remain_height_dim=\dimen279
+\l__tblr_long_from_int=\count325
+\l__tblr_long_to_int=\count326
+\l__tblr_curr_i_int=\count327
+\l__tblr_prev_i_int=\count328
+\l__tblr_table_page_int=\count329
+\l__tblr_table_head_box=\box88
+\l__tblr_table_foot_box=\box89
+\l__tblr_table_head_foot_dim=\dimen280
+\l__tblr_table_head_body_foot_dim=\dimen281
+\l__tblr_table_box=\box90
+\l__tblr_table_hlines_box=\box91
+\l__tblr_hline_box=\box92
+\l__tblr_row_box=\box93
+\l__tblr_col_o_wd_dim=\dimen282
+\l__tblr_col_b_wd_dim=\dimen283
+\l__tblr_hline_leftskip_dim=\dimen284
+\l__tblr_hline_rightskip_dim=\dimen285
+\l__tblr_row_ht_dim=\dimen286
+\l__tblr_row_dp_dim=\dimen287
+\l__tblr_row_abovesep_dim=\dimen288
+\l__tblr_row_belowsep_dim=\dimen289
+\l__tblr_row_vlines_box=\box94
+\l__tblr_vline_box=\box95
+\l__tblr_cell_box=\box96
+\l__row_upper_dim=\dimen290
+\l__row_lower_dim=\dimen291
+\l__row_vpace_dim=\dimen292
+\l__tblr_vline_aboveskip_dim=\dimen293
+\l__tblr_vline_belowskip_dim=\dimen294
+\l__tblr_cell_wd_dim=\dimen295
+\l__tblr_cell_ht_dim=\dimen296
+\l__tblr_diag_box=\box97
+)
+\c@remark=\count330
+\c@notation=\count331
 Package translations Info: No language package found. I am going to use `englis
-h' as default language. on input line 35.
- (./paper.aux
-(./models1_short.aux))
+h' as default language. on input line 36.
+
+(./paper.aux (./tab1_models_short.aux))
 \openout1 = `paper.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
 
 (/usr/local/texlive/2022/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count309
-\scratchdimen=\dimen257
-\scratchbox=\box72
-\nofMPsegments=\count310
-\nofMParguments=\count311
+\scratchcounter=\count332
+\scratchdimen=\dimen297
+\scratchbox=\box98
+\nofMPsegments=\count333
+\nofMParguments=\count334
 \everyMPshowfont=\toks37
-\MPscratchCnt=\count312
-\MPscratchDim=\dimen258
-\MPnumerator=\count313
-\makeMPintoPDFobject=\count314
+\MPscratchCnt=\count335
+\MPscratchDim=\dimen298
+\MPnumerator=\count336
+\makeMPintoPDFobject=\count337
 \everyMPtoPDFconversion=\toks38
 )
 *geometry* driver: auto-detecting
@@ -490,35 +582,35 @@ File: translations-basic-dictionary-english.trsl (english translation file `tra
 nslations-basic-dictionary')
 )
 Package translations Info: loading dictionary `translations-basic-dictionary' f
-or `english'. on input line 35.
+or `english'. on input line 36.
 
 
 LaTeX Font Warning: Font shape `T1/cmr/m/n' in size <13> not available
-(Font)              size <12> substituted on input line 44.
+(Font)              size <12> substituted on input line 45.
 
 
 LaTeX Font Warning: Font shape `T1/cmr/bx/n' in size <13> not available
-(Font)              size <12> substituted on input line 44.
+(Font)              size <12> substituted on input line 45.
 
-LaTeX Font Info:    Calculating math sizes for size <11> on input line 44.
+LaTeX Font Info:    Calculating math sizes for size <11> on input line 45.
 
 LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <5.5> not available
-(Font)              size <5> substituted on input line 44.
+(Font)              size <5> substituted on input line 45.
 
 
 LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <5.5> not available
-(Font)              size <5> substituted on input line 44.
+(Font)              size <5> substituted on input line 45.
 
 
 LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <5.5> not available
-(Font)              size <5> substituted on input line 44.
+(Font)              size <5> substituted on input line 45.
 
-LaTeX Font Info:    Trying to load font information for U+msa on input line 44.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 45.
 
 (/usr/local/texlive/2022/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 44.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 45.
 
 
 (/usr/local/texlive/2022/texmf-dist/tex/latex/amsfonts/umsb.fd
@@ -529,46 +621,53 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 
 {/usr/local/texlive/2022/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2] [3]
  [4] [5]
-[6] [7] [8] [9] (./desc_table.tex) [10]
-<koalice_2018_en.png, id=46, 867.24pt x 578.16pt>
+[6] [7] [8] [9] [10] (./desc_table.tex)
+<koalice_2018_en.png, id=50, 3613.5pt x 2409.0pt>
 File: koalice_2018_en.png Graphic file (type png)
 <use koalice_2018_en.png>
-Package pdftex.def Info: koalice_2018_en.png  used on input line 226.
-(pdftex.def)             Requested size: 867.2379pt x 578.15858pt.
+Package pdftex.def Info: koalice_2018_en.png  used on input line 230.
+(pdftex.def)             Requested size: 3613.49123pt x 2408.99416pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 226--228
+Underfull \hbox (badness 10000) in paragraph at lines 230--232
 [][]
  []
 
-<koalice_2022_en.png, id=47, 867.24pt x 578.16pt>
+[11]
+<koalice_2022_en.png, id=56, 3613.5pt x 2409.0pt>
 File: koalice_2022_en.png Graphic file (type png)
 <use koalice_2022_en.png>
-Package pdftex.def Info: koalice_2022_en.png  used on input line 233.
-(pdftex.def)             Requested size: 867.2379pt x 578.15858pt.
+Package pdftex.def Info: koalice_2022_en.png  used on input line 237.
+(pdftex.def)             Requested size: 3613.49123pt x 2408.99416pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 233--235
+Underfull \hbox (badness 10000) in paragraph at lines 237--239
 [][]
  []
 
-[11 <./koalice_2018_en.png>] [12 <./koalice_2022_en.png>]
-<kscm_interaction.png, id=54, 433.62pt x 289.08pt>
-File: kscm_interaction.png Graphic file (type png)
-<use kscm_interaction.png>
-Package pdftex.def Info: kscm_interaction.png  used on input line 256.
-(pdftex.def)             Requested size: 433.61894pt x 289.07928pt.
- [13] [14 <./kscm_interaction.png>]
-\openout2 = `models1_short.aux'.
+[12 <./koalice_2018_en.png> <./koalice_2022_en.png>] [13]
+\openout2 = `tab1_models_short.aux'.
 
- (./models1_short.tex
-Overfull \hbox (2.69301pt too wide) in paragraph at lines 4--56
+
+(./tab1_models_short.tex
+Overfull \hbox (34.81175pt too wide) in paragraph at lines 4--42
  [][] 
  []
 
-) [15] (./paper.bbl [16
+) [14]
+<gov_interaction.png, id=73, 578.16pt x 289.08pt>
+File: gov_interaction.png Graphic file (type png)
+<use gov_interaction.png>
+Package pdftex.def Info: gov_interaction.png  used on input line 269.
+(pdftex.def)             Requested size: 578.15858pt x 289.07928pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 269--271
+[][]
+ []
+
+[15
 
 
 
-]
+] [16 <./gov_interaction.png>] (./paper.bbl
 Underfull \hbox (badness 10000) in paragraph at lines 23--26
 []\T1/cmr/m/n/10 Golder, Sona N. 2005. ``Pre-electoral coali-tions in com-par-a
 -tive per-spec-
@@ -580,7 +679,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 23--26
 toral stud-ies \T1/cmr/m/n/10 24 (4): 643--663.
  []
 
-
+[17]
 Underfull \hbox (badness 10000) in paragraph at lines 32--35
 []\T1/cmr/m/n/10 Golder, Sona N. 2006b. ``Pre-electoral coali-tion for-ma-tion 
 in par-lia-men-
@@ -588,8 +687,8 @@ in par-lia-men-
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 32--35
-\T1/cmr/m/n/10 tary democ-ra-cies.'' \T1/cmr/m/it/10 British jour-nal of po-lit
--i-cal sci-ence \T1/cmr/m/n/10 36 (2): 193--212.
+\T1/cmr/m/n/10 tary democ-ra-cies.'' \T1/cmr/m/it/10 British Jour-nal of Po-lit
+-i-cal Sci-ence \T1/cmr/m/n/10 36 (2): 193--212.
  []
 
 
@@ -652,122 +751,129 @@ Underfull \hbox (badness 1199) in paragraph at lines 89--93
 /it/10 Party Pol-i-tics \T1/cmr/m/n/10 26 (1): 69--81.
  []
 
-[17]
-Underfull \hbox (badness 3536) in paragraph at lines 156--159
+
+Underfull \hbox (badness 10000) in paragraph at lines 117--121
+[]\T1/cmr/m/n/10 Laakso, Markku, and Rein Taagepera. 1979. ``^^PEf-fec-tive^^Q 
+Num-ber of Par-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 117--121
+\T1/cmr/m/n/10 ties: A Mea-sure with Ap-pli-ca-tion to West Eu-rope.'' \T1/cmr/
+m/it/10 Com-par-a-tive Po-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 117--121
+\T1/cmr/m/it/10 lit-i-cal Stud-ies \T1/cmr/m/n/10 12 (1): 3--27. https://doi.or
+g/10.1177/001041407901200101,
+ []
+
+[18]
+Overfull \hbox (17.95154pt too wide) in paragraph at lines 150--152
+[]\T1/cmr/m/n/10 ODS. 2022. ``Stanovy ODS.'' https://web.archive.org/web/202202
+16134756/https://www.ods.cz/o-
+ []
+
+
+Overfull \hbox (47.94421pt too wide) in paragraph at lines 154--156
+[]\T1/cmr/m/n/10 Piráti. 2022. ``Volební °ád.'' https://web.archive.org/web/202
+20122172505/https://wiki.pirati.cz/rules/vr. 
+ []
+
+
+Underfull \hbox (badness 3536) in paragraph at lines 174--177
 []\T1/cmr/m/n/10 Schakel, Ar-jan H, and Va-len-tyna Ro-manova. 2021. ``Hor-i-zo
 n-tal and ver-ti-cal spill-
  []
 
 
-Underfull \hbox (badness 1331) in paragraph at lines 156--159
+Underfull \hbox (badness 1331) in paragraph at lines 174--177
 \T1/cmr/m/n/10 over in mul-ti-level elec-toral sys-tems.'' \T1/cmr/m/it/10 Re-g
 ional & Fed-eral Stud-ies \T1/cmr/m/n/10 31 (3): 299--311.
  []
 
 
-Underfull \hbox (badness 4713) in paragraph at lines 165--169
+Underfull \hbox (badness 4713) in paragraph at lines 183--187
 \T1/cmr/m/n/10 ber-ship af-fect coali-tion for-ma-tion.'' \T1/cmr/m/it/10 Lo-ca
 l Gov-ern-ment Stud-ies \T1/cmr/m/n/10 47 (2): 312--330.
  []
 
-) [18]
-<dyad_heatmap.png, id=79, 2710.125pt x 2710.125pt>
+
+Overfull \hbox (62.46844pt too wide) in paragraph at lines 189--191
+[]\T1/cmr/m/n/10 STAN. 2021. ``Stanovy hnutí STAN.'' https://web.archive.org/we
+b/20220308203603/https://www.starostove-
+ []
+
+
+Overfull \hbox (14.42462pt too wide) in paragraph at lines 193--195
+[]\T1/cmr/m/n/10 TOP09. 2021. ``Stanovy.'' https://web.archive.org/web/20220308
+123623/https://www.top09.cz/o-
+ []
+
+) [19]
+<dyad_heatmap.png, id=92, 650.43pt x 650.43pt>
 File: dyad_heatmap.png Graphic file (type png)
 <use dyad_heatmap.png>
-Package pdftex.def Info: dyad_heatmap.png  used on input line 290.
-(pdftex.def)             Requested size: 2710.11842pt x 2710.11842pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 290--292
-[][]
+Package pdftex.def Info: dyad_heatmap.png  used on input line 302.
+(pdftex.def)             Requested size: 650.4284pt x 650.4284pt.
+<senate_dyad_heatmap.png, id=93, 650.43pt x 650.43pt>
+File: senate_dyad_heatmap.png Graphic file (type png)
+<use senate_dyad_heatmap.png>
+Package pdftex.def Info: senate_dyad_heatmap.png  used on input line 312.
+(pdftex.def)             Requested size: 650.4284pt x 650.4284pt.
+ [20 <./dyad_heatmap.png>] [21 <./senate_dyad_heatmap.png>]
+(./tab1_models_tabular.tex)
+Overfull \hbox (25.63576pt too wide) in paragraph at lines 324--327
+ [] 
  []
 
-[19 <./dyad_heatmap.png>] (./baseline_models_long.tex) [20] (./models1_long.tex
-
-Overfull \hbox (19.56194pt too wide) in alignment at lines 1--6
- [] [] [] [] [] 
+[22] (./app_tab1_models_tabular.tex) [23] (./only_pecs.tex) [24]
+Overfull \hbox (44.93208pt too wide) in paragraph at lines 365--389
+[] 
  []
 
-
-Overfull \hbox (19.56194pt too wide) in alignment at lines 6--12
- [] [] [] [] [] 
- []
-
-
-Overfull \hbox (19.56194pt too wide) in alignment at lines 12--16
- [] [] [] [] [] 
- []
-
-
-Overfull \hbox (19.56194pt too wide) in alignment at lines 16--19
- [] [] [] [] [] 
- []
-
-
-Overfull \hbox (19.56194pt too wide) in alignment at lines 19--67
- [] [] [] [] [] 
- []
-
-[21]) (./models2_long.tex
-Overfull \hbox (19.56194pt too wide) in alignment at lines 1--6
- [] [] [] [] [] 
- []
-
-
-Overfull \hbox (19.56194pt too wide) in alignment at lines 6--12
- [] [] [] [] [] 
- []
-
-
-Overfull \hbox (19.56194pt too wide) in alignment at lines 12--16
- [] [] [] [] [] 
- []
-
-
-Overfull \hbox (19.56194pt too wide) in alignment at lines 16--19
- [] [] [] [] [] 
- []
-
-
-Overfull \hbox (19.56194pt too wide) in alignment at lines 19--67
- [] [] [] [] [] 
- []
-
-[22]) [23] (./matching_models.tex) [24] (./paper.aux (./models1_short.aux))
+(./matching_models.tex) [25] (./paper.aux (./tab1_models_short.aux))
 
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.0pt have occurred.
 
  ) 
 Here is how much of TeX's memory you used:
- 10335 strings out of 478268
- 212443 string characters out of 5846347
- 496798 words of memory out of 5000000
- 28359 multiletter control sequences out of 15000+600000
+ 12128 strings out of 478268
+ 259273 string characters out of 5846347
+ 559431 words of memory out of 5000000
+ 30147 multiletter control sequences out of 15000+600000
  487780 words of font info for 75 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 85i,9n,90p,1470b,513s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 85i,10n,90p,1539b,511s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {/usr/local/texlive/2022/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}
 {/usr/local/texlive/2022/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}<
-/usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></
-usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></us
-r/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr
-/local/texlive/2022/texmf-dist/fonts/type1/public/cm-super/sfbi1095.pfb></usr/l
-ocal/texlive/2022/texmf-dist/fonts/type1/public/cm-super/sfbx0800.pfb></usr/loc
-al/texlive/2022/texmf-dist/fonts/type1/public/cm-super/sfbx0900.pfb></usr/local
-/texlive/2022/texmf-dist/fonts/type1/public/cm-super/sfbx1095.pfb></usr/local/t
-exlive/2022/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></usr/local/tex
-live/2022/texmf-dist/fonts/type1/public/cm-super/sfrm0600.pfb></usr/local/texli
-ve/2022/texmf-dist/fonts/type1/public/cm-super/sfrm0700.pfb></usr/local/texlive
-/2022/texmf-dist/fonts/type1/public/cm-super/sfrm0800.pfb></usr/local/texlive/2
-022/texmf-dist/fonts/type1/public/cm-super/sfrm0900.pfb></usr/local/texlive/202
-2/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb></usr/local/texlive/2022/
-texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb></usr/local/texlive/2022/te
-xmf-dist/fonts/type1/public/cm-super/sfti1000.pfb></usr/local/texlive/2022/texm
-f-dist/fonts/type1/public/cm-super/sfti1095.pfb>
-Output written on paper.pdf (24 pages, 1774569 bytes).
+/usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex8.pf
+b></usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb
+></usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb><
+/usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></u
+sr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr
+/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/lo
+cal/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local
+/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/
+texlive/2022/texmf-dist/fonts/type1/public/cm-super/sfbi1095.pfb></usr/local/te
+xlive/2022/texmf-dist/fonts/type1/public/cm-super/sfbx0800.pfb></usr/local/texl
+ive/2022/texmf-dist/fonts/type1/public/cm-super/sfbx0900.pfb></usr/local/texliv
+e/2022/texmf-dist/fonts/type1/public/cm-super/sfbx1095.pfb></usr/local/texlive/
+2022/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></usr/local/texlive/20
+22/texmf-dist/fonts/type1/public/cm-super/sfrm0600.pfb></usr/local/texlive/2022
+/texmf-dist/fonts/type1/public/cm-super/sfrm0700.pfb></usr/local/texlive/2022/t
+exmf-dist/fonts/type1/public/cm-super/sfrm0800.pfb></usr/local/texlive/2022/tex
+mf-dist/fonts/type1/public/cm-super/sfrm0900.pfb></usr/local/texlive/2022/texmf
+-dist/fonts/type1/public/cm-super/sfrm1000.pfb></usr/local/texlive/2022/texmf-d
+ist/fonts/type1/public/cm-super/sfrm1095.pfb></usr/local/texlive/2022/texmf-dis
+t/fonts/type1/public/cm-super/sfti1000.pfb></usr/local/texlive/2022/texmf-dist/
+fonts/type1/public/cm-super/sfti1095.pfb>
+Output written on paper.pdf (25 pages, 2118919 bytes).
 PDF statistics:
- 173 PDF objects out of 1000 (max. 8388607)
- 107 compressed objects within 2 object streams
+ 207 PDF objects out of 1000 (max. 8388607)
+ 125 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
- 21 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 26 words of extra memory for PDF output out of 10000 (max. 10000000)
 

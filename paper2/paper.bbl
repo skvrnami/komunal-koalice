@@ -1,4 +1,4 @@
-\begin{thebibliography}{32}
+\begin{thebibliography}{38}
 \newcommand{\enquote}[1]{``#1''}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\normalfont{#1}}
@@ -30,7 +30,7 @@ Golder, Sona~N. 2006{\natexlab{a}}. \emph{The logic of pre-electoral coalition
 
 \bibitem[Golder(2006{\natexlab{b}})]{golder2006b}
 Golder, Sona~N. 2006{\natexlab{b}}. ``Pre-electoral coalition formation in
-  parliamentary democracies.'' \emph{British journal of political science} 36
+  parliamentary democracies.'' \emph{British Journal of Political Science} 36
   (2): 193--212. https://doi.org/{10.1017/S0007123406000123}.
 
 \bibitem[Greene and Haber(2017)]{greene2017}
@@ -103,11 +103,21 @@ Jolly, Seth, Ryan Bakker, Liesbet Hooghe, Gary Marks, Jonathan Polk, Jan Rovny,
   survey trend file, 1999--2019.'' \emph{Electoral Studies} 75: 1--8.
   https://doi.org/{10.1016/j.electstud.2021.102420}.
 
+\bibitem[KDU-{\v{C}}SL(2022)]{kdu}
+KDU-{\v{C}}SL. 2022. ``Stanovy KDU-{\v{C}}SL.''
+  \urlprefix\url{{https://www.kdu.cz/o-nas/dokumenty/stanovy}}.
+
 \bibitem[Kostelecky et~al.(2023)]{kostelecky2023}
 Kostelecky, Tomas, Josef Bernard, Zdenka Mansfeldova, and Renata Mikesova.
   2023. ``From an alternative to a dominant form of local political actors?
   Independent candidates in the Czech local elections in 2010--2018.''
   \emph{Local Government Studies} 1--23.
+
+\bibitem[Laakso and Taagepera(1979)]{enep}
+Laakso, Markku, and Rein Taagepera. 1979. ``“Effective” Number of Parties:
+  A Measure with Application to West Europe.'' \emph{Comparative Political
+  Studies} 12 (1): 3--27. https://doi.org/{10.1177/001041407901200101},
+  \urlprefix\url{https://doi.org/10.1177/001041407901200101}.
 
 \bibitem[Linek and Škvrňák(2022)]{linek2022}
 Linek, Lukáš, and Michael Škvrňák. 2022. ``Economic and {P}andemic
@@ -135,6 +145,14 @@ Moffitt, Benjamin. 2018. ``The populism/anti-populism divide in Western
 M{\"u}ller, Wolfgang~C, and Kaare Str{\o}m. 1999. \emph{Policy, Office, or
   Votes: How Political Parties in Western Europe Make Hard Decisions}.
   Cambridge University Press.
+
+\bibitem[ODS(2022)]{ods}
+ODS. 2022. ``Stanovy ODS.''
+  \urlprefix\url{https://web.archive.org/web/20220216134756/https://www.ods.cz/o-nas/stanovy}.
+
+\bibitem[Pir{\'a}ti(2022)]{pirati}
+Pir{\'a}ti. 2022. ``Volebn{\'i} {\v{r}}{\'a}d.''
+  \urlprefix\url{https://web.archive.org/web/20220122172505/https://wiki.pirati.cz/rules/vr}.
 
 \bibitem[Reif and Schmitt(1980)]{reif1980}
 Reif, Karlheinz, and Hermann Schmitt. 1980. ``Nine second-order national
@@ -166,6 +184,14 @@ Schakel, Arjan~H, and Valentyna Romanova. 2021. ``Horizontal and vertical
   football clubs and party membership affect coalition formation.'' \emph{Local
   Government Studies} 47 (2): 312--330.
   https://doi.org/{10.1080/03003930.2020.1787167}.
+
+\bibitem[STAN(2021)]{stan}
+STAN. 2021. ``Stanovy hnut{\'i} STAN.''
+  \urlprefix\url{https://web.archive.org/web/20220308203603/https://www.starostove-nezavisli.cz/o-nas/stanovy}.
+
+\bibitem[TOP09(2021)]{top09}
+TOP09. 2021. ``Stanovy.''
+  \urlprefix\url{https://web.archive.org/web/20220308123623/https://www.top09.cz/o-nas/stanovy/}.
 
 \bibitem[Vachudova(2021)]{vachudova2021}
 Vachudova, Milada~Anna. 2021. ``Populism, democracy, and party system change in
