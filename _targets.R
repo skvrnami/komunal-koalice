@@ -9,7 +9,7 @@ tar_option_set(
                "igraph", "ggraph", "ggplot2", "tidygraph", 
                "rvest", "ggrepel", "extrafont", "readr", 
                "lme4", "Matrix", "cem", "MatchIt", "estimatr", 
-               "cobalt", "optimx"), 
+               "cobalt", "optimx", "brms"), 
   format = "rds" # default storage format
 )
 
@@ -364,6 +364,148 @@ list(
       filter(ZKRATKAN8 != "NK") %>% 
       count(KODZASTUP) %>% 
       filter(n > 1)
+  }),
+  
+  tar_target(municipality_size_xlsx, {
+    read_excel(here("data", "KV2022", "KV2022reg20220810a_xlsx", 
+                                "kvrzcoco.xlsx")) %>% 
+      select(KODZASTUP, size = POCOBYV) %>% 
+      unique()
+  }),
+  
+  # Municipalities selection summary ----------------------
+  tar_target(municipalities_selection_tab, {
+    municipality_size_cat <- municipality_size_xlsx %>% 
+      mutate(size_cat = case_when(
+        size <= 500 ~ "0-500", 
+        between(size, 501, 1000) ~ "501-1000",
+        between(size, 1001, 2000) ~ "1001-2000",
+        between(size, 2001, 5000) ~ "2001-5000", 
+        size >= 5001 ~ "Above 5000"
+      ) %>% factor(., levels = c("0-500", "501-1000", "1001-2000", 
+                                 "2001-5000", "Above 5000")))
+    
+    all_municipalities <- candidates_2022 %>% 
+      filter(!KODZASTUP %in% city_districts$CHODNOTA) %>% 
+      group_by(KODZASTUP, OSTRANA) %>% 
+      mutate(ind = all(ZKRATKAN8 == "NK")) %>% 
+      ungroup()
+      
+    all_mun_summary <- all_municipalities %>% 
+      group_by(KODZASTUP) %>% 
+      summarise(
+        n_candidates = n(), 
+        n_mandates = sum(MANDAT),
+        n_pure_independents = sum(ind),
+        .groups = "drop"
+      ) %>% 
+      mutate(uncompetitive = n_candidates == n_mandates | n_mandates == 0) %>% 
+      left_join(., municipality_size_cat, by = c("KODZASTUP"))
+    
+    all_comp_cat <- all_mun_summary %>% 
+      mutate(candidates_per_mandate = n_candidates / n_mandates, 
+             candidates_per_mandate_cat = case_when(
+               uncompetitive ~ "Uncompetitive",
+               candidates_per_mandate <= 1.5 ~ "(1, 1.5]",
+               candidates_per_mandate <= 2 ~ "(1.5, 2]",
+               candidates_per_mandate <= 3 ~ "(2, 3]",
+               candidates_per_mandate > 3 ~ "More than 3",
+             ) %>% factor(., levels = c("Uncompetitive", "(1, 1.5]", "(1.5, 2]", "(2, 3]", "More than 3"))) %>% 
+      count(candidates_per_mandate_cat) %>% 
+      tidyr::pivot_wider(., names_from = "candidates_per_mandate_cat", values_from = "n")
+    
+    all_competition <- all_mun_summary %>% 
+      count(uncompetitive) %>% 
+      mutate(uncompetitive = if_else(uncompetitive, "Uncompetitive", "Competitive")) %>% 
+      tidyr::pivot_wider(., names_from = "uncompetitive", values_from = "n")
+    
+    all_size <- all_mun_summary %>% 
+      count(size_cat) %>% 
+      tidyr::pivot_wider(., names_from = "size_cat", values_from = "n")
+    
+    all_ind <- all_mun_summary %>% 
+      mutate(pct_independents = n_pure_independents / n_candidates) %>% 
+      summarise(pct_independents = mean(pct_independents) * 100)
+      
+    all_ind_all <- all_mun_summary %>% 
+      left_join(., parties_2022 %>% 
+                  group_by(KODZASTUP) %>% 
+                  summarise(all_ind = all(ZKRATKAN8 == "NK"), 
+                            .groups = "drop"), 
+                by = "KODZASTUP") %>% 
+      count(all_ind) %>% 
+      mutate(all_ind = if_else(all_ind, "All independent", "Not all independent")) %>% 
+      tidyr::pivot_wider(., names_from = "all_ind", values_from = "n")
+    
+    selected_municipalities <- candidates_2022 %>% 
+      filter(!KODZASTUP %in% city_districts$CHODNOTA) %>% 
+      filter(KODZASTUP %in% eligible_municipalities_2parties_and_more$KODZASTUP) %>% 
+      group_by(KODZASTUP, OSTRANA) %>% 
+      mutate(ind = all(ZKRATKAN8 == "NK")) %>% 
+      ungroup()
+    
+    selected_sum <- selected_municipalities %>% 
+      group_by(KODZASTUP) %>% 
+      summarise(
+        n_candidates = n(), 
+        n_mandates = sum(MANDAT),
+        n_pure_independents = sum(ind),
+        .groups = "drop"
+      ) %>% 
+      mutate(uncompetitive = n_candidates == n_mandates | n_mandates == 0) %>% 
+      left_join(., municipality_size_cat, by = c("KODZASTUP"))
+      
+    selected_competition <- selected_sum %>% 
+      count(uncompetitive) %>% 
+      mutate(uncompetitive = if_else(uncompetitive, "Uncompetitive", "Competitive")) %>% 
+      tidyr::pivot_wider(., names_from = "uncompetitive", values_from = "n")
+    
+    selected_comp_cat <- selected_sum %>% 
+      mutate(candidates_per_mandate = n_candidates / n_mandates, 
+             candidates_per_mandate_cat = case_when(
+               uncompetitive ~ "Uncompetitive",
+               candidates_per_mandate <= 1.5 ~ "(1, 1.5]",
+               candidates_per_mandate <= 2 ~ "(1.5, 2]",
+               candidates_per_mandate <= 3 ~ "(2, 3]",
+               candidates_per_mandate > 3 ~ "More than 3",
+             ) %>% factor(., levels = c("Uncompetitive", "(1, 1.5]", "(1.5, 2]", "(2, 3]", "More than 3"))) %>% 
+      count(candidates_per_mandate_cat) %>% 
+      tidyr::pivot_wider(., names_from = "candidates_per_mandate_cat", values_from = "n")
+    
+    selected_size <- selected_sum %>% 
+      count(size_cat) %>% 
+      tidyr::pivot_wider(., names_from = "size_cat", values_from = "n")
+    
+    selected_ind <- selected_sum %>% 
+      mutate(pct_independents = n_pure_independents / n_candidates) %>% 
+      summarise(pct_independents = mean(pct_independents) * 100)
+    
+    selected_all_ind <- selected_sum %>% 
+      left_join(., parties_2022 %>% 
+                group_by(KODZASTUP) %>% 
+                summarise(all_ind = all(ZKRATKAN8 == "NK"), 
+                          .groups = "drop"), 
+              by = "KODZASTUP") %>% 
+      count(all_ind) %>% 
+      mutate(all_ind = if_else(all_ind, "All independent", "Not all independent")) %>% 
+      tidyr::pivot_wider(., names_from = "all_ind", values_from = "n")
+    
+    all_sum_tbl <- bind_cols(all_size, all_comp_cat, all_competition, all_ind, all_ind_all)
+    sel_sum_tbl <- bind_cols(selected_size, selected_comp_cat, selected_competition, selected_ind, selected_all_ind)
+    
+    bind_rows(
+      all_sum_tbl %>% mutate(type = "All municipalities"),
+      sel_sum_tbl %>% mutate(type = "Included municipalities")
+    ) %>% select(type, everything()) %>% 
+      tidyr::pivot_longer(., 2:ncol(.)) %>% 
+      tidyr::pivot_wider(., names_from = "type", values_from = "value",
+                         values_fill = 0)
+  }),
+  
+  tar_target(municipalities_selection_tex, {
+    municipalities_selection_tab %>% 
+      knitr::kable(., format = "latex", digits = 2) %>% 
+      writeLines(., "output/tab_selected_municipalities.tex")
   }),
   
   ## all possible dyads -----------------------------------
@@ -884,29 +1026,47 @@ list(
   }),
   
   tar_target(desc_table, {
+    not_na <- function(x, na.rm){
+      sum(!is.na(x))
+    }
+    
     tmp <- final_df_results %>% 
       group_by(created) %>% 
       select(created, created_2018, spolu, pirstan, tss, pct_change,
              created_senate, 
              ano_government, kscm_government, spolu_government, 
              coalition_size_votes_norm, 
-             diff_lrgen, local_government_dummy, asymmetry, enep_votes) %>% 
-      summarise_all(list(mean = mean, sd = sd), na.rm = TRUE) %>% 
+             diff_lrgen, diff_antielite, 
+             local_government_dummy, asymmetry, enep_votes) %>% 
+      summarise_all(list(mean = mean, sd = sd, obs = not_na), na.rm = TRUE) %>% 
       tidyr::pivot_longer(., cols = 2:ncol(.)) %>% 
-      mutate(type = gsub("_", "", stringr::str_extract(name, "_sd|_mean")), 
-             name = gsub("_sd|_mean", "", name)) %>% 
+      mutate(type = gsub("_", "", stringr::str_extract(name, "_sd|_mean|_obs")), 
+             name = gsub("_sd|_mean|_obs", "", name)) %>% 
       tidyr::pivot_wider(., id_cols = c("created", "name"), 
                          names_from = "type", values_from = "value")
     
     left_join(
       tmp %>% filter(created == 1) %>% 
-        rename(mean_pec = mean, sd_pec = sd) %>% 
+        rename(mean_pec = mean, sd_pec = sd, n_pec = obs) %>% 
         select(-created), 
       tmp %>% filter(created == 0) %>% 
-        rename(mean_no_pec = mean, sd_no_pec = sd) %>% 
+        rename(mean_no_pec = mean, sd_no_pec = sd, n_no_pec = obs) %>% 
         select(-created), 
       by = "name"
     )
+  }),
+  
+  tar_target(desc_table2, {
+    final_df_results %>% 
+      group_by(created, local_government_fct) %>% 
+      summarise(n = n(), .groups = "drop") %>% 
+      group_by(created) %>% 
+      mutate(pct = n / sum(n) * 100) %>% 
+      ungroup() %>% 
+      mutate(created = if_else(created == 0, "no_pec", "pec")) %>% 
+      tidyr::pivot_wider(., id_cols = local_government_fct, names_from = created, 
+                         values_from = c(n, pct)) %>% 
+      select(local_government_fct, n_pec, pct_pec, n_no_pec, pct_no_pec)
   }),
   
   # tar_target(
@@ -1148,122 +1308,6 @@ list(
   
   
   # # models ---------------------------------------
-  # tar_target(m0, {
-  #   glmer(created ~ created_2018 +
-  #           coalition_size_votes + I(coalition_size_votes_norm^2) +
-  #           coalition_size_votes_norm * asymmetry +
-  #           enep_votes + municipality_seats + 
-  #           (1 | KODZASTUP),
-  #         family = binomial(link = "probit"),
-  #         glmerControl(optimizer = "bobyqa"),
-  #         data = final_df)
-  # }),
-  # 
-  # tar_target(m1, {
-  #   glmer(created ~ created_2018 +
-  #           spolu + pirstan + tss +
-  #           coalition_size_votes_norm + I(coalition_size_votes_norm^2) +
-  #           coalition_size_votes_norm * asymmetry +
-  #           enep_votes + municipality_seats + 
-  #           (1 | KODZASTUP),
-  #         family = binomial(link = "probit"),
-  #         glmerControl(optimizer = "bobyqa"),
-  #         data = final_df)
-  # }),
-  # 
-  # tar_target(m2, {
-  #   glmer(created ~ created_2018 + created_senate +
-  #           spolu + pirstan + tss +
-  #           coalition_size_votes_norm + I(coalition_size_votes_norm^2) +
-  #           coalition_size_votes_norm * asymmetry +
-  #           enep_votes + municipality_seats + 
-  #           (1 | KODZASTUP),
-  #         family = binomial(link = "probit"),
-  #         glmerControl(optimizer = "bobyqa"),
-  #         data = final_df)
-  # }),
-  # 
-  # tar_target(m3, {
-  #   glmer(created ~ created_2018 + created_senate +
-  #           spolu * ano_government +
-  #           pirstan + tss +
-  #           coalition_size_votes_norm + I(coalition_size_votes_norm^2) +
-  #           coalition_size_votes_norm * asymmetry +
-  #           enep_votes + municipality_seats + 
-  #           (1 | KODZASTUP),
-  #         family = binomial(link = "probit"),
-  #         glmerControl(optimizer = "bobyqa"),
-  #         data = final_df)
-  # }),
-  # 
-  # tar_target(m3_kscm, {
-  #   glmer(created ~ created_2018 + created_senate +
-  #           spolu * ano_government +
-  #           spolu * kscm_government +
-  #           pirstan + tss +
-  #           coalition_size_votes_norm + I(coalition_size_votes_norm^2) +
-  #           coalition_size_votes_norm * asymmetry +
-  #           enep_votes + municipality_seats + 
-  #           (1 | KODZASTUP),
-  #         family = binomial(link = "probit"),
-  #         glmerControl(optimizer = "bobyqa"),
-  #         data = final_df)
-  # }),
-  # 
-  # tar_target(m3_left, {
-  #   glmer(created ~ created_2018 + created_senate +
-  #           spolu * ano_government +
-  #           spolu * left_government +
-  #           pirstan + tss +
-  #           coalition_size_votes_norm + I(coalition_size_votes_norm^2) +
-  #           coalition_size_votes_norm * asymmetry +
-  #           enep_votes + municipality_seats + 
-  #           (1 | KODZASTUP),
-  #         family = binomial(link = "probit"),
-  #         glmerControl(optimizer = "bobyqa"),
-  #         data = final_df)
-  # }),
-  # 
-  # tar_target(m4, {
-  #   glmer(created ~ created_2018 + created_senate +
-  #           spolu * spolu_government +
-  #           pirstan + tss +
-  #           coalition_size_votes_norm + I(coalition_size_votes_norm^2) +
-  #           coalition_size_votes_norm * asymmetry +
-  #           enep_votes + municipality_seats + 
-  #           (1 | KODZASTUP),
-  #         family = binomial(link = "probit"),
-  #         glmerControl(optimizer = "bobyqa"),
-  #         data = final_df)
-  # }),
-  # 
-  # # local_government_dummy
-  # tar_target(m5, {
-  #   glmer(created ~ created_2018 + created_senate +
-  #           local_government_dummy +
-  #           spolu + pirstan + tss +
-  #           coalition_size_votes_norm + I(coalition_size_votes_norm^2) +
-  #           coalition_size_votes_norm * asymmetry +
-  #           enep_votes + municipality_seats + 
-  #           (1 | KODZASTUP),
-  #         family = binomial(link = "probit"),
-  #         glmerControl(optimizer = "bobyqa"),
-  #         data = final_df)
-  # }),
-  # 
-  # tar_target(m6, {
-  #   glmer(created ~ created_2018 + created_senate +
-  #           local_government_fct +
-  #           spolu + pirstan + tss +
-  #           coalition_size_votes_norm + I(coalition_size_votes_norm^2) +
-  #           coalition_size_votes_norm * asymmetry +
-  #           enep_votes + municipality_seats + 
-  #           (1 | KODZASTUP),
-  #         family = binomial(link = "probit"),
-  #         glmerControl(optimizer = "bobyqa"),
-  #         data = final_df)
-  # }),
-  
   # models with RE for dyad -------------------------------
   
   tar_target(m0_dyad, {
@@ -1418,6 +1462,116 @@ list(
   }),
   
   # ## robustness checks ------------------------------------
+  ## Municipality_size --------------------------------------
+  
+  tar_target(m2_dyad_small, {
+    brm(created ~ created_2018 + created_senate +
+            spolu + #pirstan + tss + 
+            pct_change + 
+            log1p(coalition_size_votes) + 
+            log1p(coalition_size_votes) * asymmetry +
+            enep_votes + # log1p(municipality_seats) + 
+            (1 | KODZASTUP) + (1 | dyad_name),
+          family = bernoulli(link = "logit"),
+          data = final_df_results %>% 
+            filter(municipality_size <= 5000))
+  }),
+  
+  tar_target(m3_dyad_small, {
+    brm(created ~ created_2018 + created_senate +
+            pct_change + 
+            spolu * ano_government +
+            # pirstan + tss +
+            log1p(coalition_size_votes) + 
+            log1p(coalition_size_votes) * asymmetry +
+            enep_votes + # log1p(municipality_seats) + 
+            (1 | KODZASTUP) + (1 | dyad_name),
+          family = bernoulli(link = "logit"),
+          data = final_df_results %>% 
+            filter(municipality_size <= 5000))
+  }),
+  
+  tar_target(m5_dyad_small, {
+    brm(created ~ created_2018 + created_senate +
+            pct_change + 
+            local_government_dummy +
+            spolu + # pirstan + tss +
+            log1p(coalition_size_votes) + 
+            log1p(coalition_size_votes) * asymmetry +
+            enep_votes + # log1p(municipality_seats) + 
+            (1 | KODZASTUP) + (1 | dyad_name),
+          family = bernoulli(link = "logit"),
+          data = final_df_results %>% 
+            filter(municipality_size <= 5000))
+  }),
+  
+  tar_target(m6_dyad_small, {
+    brm(created ~ created_2018 + created_senate +
+            pct_change + 
+            local_government_fct +
+            spolu + # pirstan + tss +
+            log1p(coalition_size_votes) + 
+            log1p(coalition_size_votes) * asymmetry +
+            enep_votes + #log1p(municipality_seats) + 
+            (1 | KODZASTUP) + (1 | dyad_name),
+          family = bernoulli(link = "logit"),
+          data = final_df_results %>% 
+            filter(municipality_size <= 5000))
+  }),
+  
+  tar_target(m2_dyad_large, {
+    brm(created ~ created_2018 + created_senate +
+            spolu + pirstan + tss + pct_change + 
+            log1p(coalition_size_votes) + 
+            log1p(coalition_size_votes) * asymmetry +
+            enep_votes + # log1p(municipality_seats) + 
+            (1 | KODZASTUP) + (1 | dyad_name),
+          family = bernoulli(link = "logit"),
+          data = final_df_results %>% 
+            filter(municipality_size > 5000))
+  }),
+  
+  tar_target(m3_dyad_large, {
+    brm(created ~ created_2018 + created_senate +
+            pct_change + 
+            spolu * ano_government +
+            pirstan + tss +
+            log1p(coalition_size_votes) + 
+            log1p(coalition_size_votes) * asymmetry +
+            enep_votes + # log1p(municipality_seats) + 
+            (1 | KODZASTUP) + (1 | dyad_name),
+          family = bernoulli(link = "logit"),
+          data = final_df_results %>% 
+            filter(municipality_size > 5000))
+  }),
+  
+  tar_target(m5_dyad_large, {
+    brm(created ~ created_2018 + created_senate +
+            pct_change + 
+            local_government_dummy +
+            spolu + pirstan + tss +
+            log1p(coalition_size_votes) + 
+            log1p(coalition_size_votes) * asymmetry +
+            enep_votes + # log1p(municipality_seats) + 
+            (1 | KODZASTUP) + (1 | dyad_name),
+          family = bernoulli(link = "logit"),
+          data = final_df_results %>% 
+            filter(municipality_size > 5000))
+  }),
+  
+  tar_target(m6_dyad_large, {
+    brm(created ~ created_2018 + created_senate +
+            pct_change + 
+            local_government_fct +
+            spolu + pirstan + tss +
+            log1p(coalition_size_votes) + 
+            log1p(coalition_size_votes) * asymmetry +
+            enep_votes + #log1p(municipality_seats) + 
+            (1 | KODZASTUP) + (1 | dyad_name),
+          family = bernoulli(link = "logit"),
+          data = final_df_results %>% 
+            filter(municipality_size > 5000))
+  }),
   
   ## only PECs ----------------------------------------------
   tar_target(m1b_dyad_coalitions, {
