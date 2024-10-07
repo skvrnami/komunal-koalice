@@ -1,0 +1,53 @@
+\begin{longtable}{lcccc}
+\caption{Baseline models}\\
+\toprule
+  & Model 1 & Model 2 & Model 3 & Model 4\\
+\midrule
+\endfirsthead
+
+\multicolumn{5}{c}{{\tablename\ \thetable{} -- continued from previous page}} \\
+\toprule
+  & Model 1 & Model 2 & Model 3 & Model 4\\
+\midrule
+\endhead
+
+\bottomrule
+\multicolumn{5}{r}{{Continued on next page}} \\
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+Together &  &  & \num{1.93}*** & \num{1.80}***\\
+ &  &  & (\num{0.07}) & (\num{0.09})\\
+PirSTAN &  &  & \num{0.23} & \num{0.14}\\
+ &  &  & (\num{0.25}) & (\num{0.26})\\
+TSS &  &  & \num{1.13}*** & \\
+ &  &  & (\num{0.31}) & \\
+Local PEC (2018) & \num{2.32}*** & \num{1.99}*** & \num{2.20}*** & \num{1.99}***\\
+ & (\num{0.13}) & (\num{0.16}) & (\num{0.13}) & (\num{0.16})\\
+Coalition size & \num{-0.52}*** & \num{-0.76}*** & \num{-0.86}*** & \num{-1.02}***\\
+ & (\num{0.06}) & (\num{0.08}) & (\num{0.07}) & (\num{0.10})\\
+Coalition size $\times$ asymmetry & \num{0.23}** & \num{0.22}+ & \num{0.49}*** & \num{0.40}**\\
+ & (\num{0.09}) & (\num{0.11}) & (\num{0.10}) & (\num{0.13})\\
+Coalition size (sq.) & \num{0.02} & \num{0.07}*** & \num{0.05}* & \num{0.10}***\\
+ & (\num{0.02}) & (\num{0.02}) & (\num{0.02}) & \vphantom{1} (\num{0.02})\\
+Ideological distance &  & \num{-0.36}*** &  & \num{-0.20}***\\
+ &  & (\num{0.03}) &  & (\num{0.03})\\
+Asymmetry & \num{0.17}* & \num{0.27}** & \num{0.40}*** & \num{0.51}***\\
+ & (\num{0.07}) & (\num{0.09}) & (\num{0.08}) & (\num{0.10})\\
+ENEP & \num{-0.13}*** & \num{-0.16}*** & \num{-0.07}*** & \num{-0.11}***\\
+ & (\num{0.02}) & (\num{0.02}) & (\num{0.02}) & (\num{0.02})\\
+(Intercept) & \num{-1.37}*** & \num{-0.46}** & \num{-2.25}*** & \num{-1.78}***\\
+ & (\num{0.11}) & (\num{0.15}) & (\num{0.13}) & (\num{0.19})\\
+\midrule
+Num.Obs. & \num{13266} & \num{6931} & \num{13266} & \num{6931}\\
+R2 Marg. & \num{0.146} & \num{0.399} & \num{0.330} & \num{0.488}\\
+R2 Cond. & \num{0.268} & \num{0.541} & \num{0.382} & \num{0.582}\\
+AIC & \num{4023.9} & \num{2162.9} & \num{3157.4} & \num{1645.9}\\
+BIC & \num{4083.8} & \num{2224.5} & \num{3239.8} & \num{1721.2}\\
+ICC & \num{0.1} & \num{0.2} & \num{0.1} & \num{0.2}\\
+RMSE & \num{0.19} & \num{0.19} & \num{0.17} & \num{0.17}\\
+\bottomrule
+\multicolumn{5}{l}{\rule{0pt}{1em}+ p $<$ 0.1, * p $<$ 0.05, ** p $<$ 0.01, *** p $<$ 0.001}\\
+\end{longtable}
