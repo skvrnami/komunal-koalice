@@ -1114,7 +1114,7 @@ list(
   }),
   
   tar_target(dyad_heatmap_png, {
-    ggsave(plot = dyad_heatmap, "paper2/dyad_heatmap.png", height = 9, width = 9)
+    ggsave(plot = dyad_heatmap, "paper/dyad_heatmap.png", height = 9, width = 9)
   }),
   
   tar_target(diff_parl_coalitions, {
@@ -1303,7 +1303,7 @@ list(
   }),
   
   tar_target(senate_dyad_heatmap_png, {
-    ggsave(plot = senate_dyad_heatmap, "paper2/senate_dyad_heatmap.png", height = 9, width = 9)
+    ggsave(plot = senate_dyad_heatmap, "paper/senate_dyad_heatmap.png", height = 9, width = 9)
   }),
   
   
