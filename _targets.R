@@ -210,15 +210,15 @@ list(
     graph <- graph_from_adjacency_matrix(matrix_coalitions_2018, 
                                          mode = 'undirected', 
                                          weighted = TRUE)
-    V(graph)$n_municipalities <- party_municipalities_2018$n
-    V(graph)$coalition <- case_when(
-      names(V(graph)) %in% c("ODS", "TOP 09", "KDU-ČSL") ~ "Together", 
-      names(V(graph)) %in% c("Piráti", "STAN") ~ "PirSTAN", 
-      names(V(graph)) %in% c("Trikolora", "Svobodní", "Soukromníci") ~ "TSS",
-      TRUE ~ "No national PEC"
-    )
     
-    tbl_g <- as_tbl_graph(graph)
+    tbl_g <- as_tbl_graph(graph) %>% 
+      left_join(., party_municipalities_2018, by = c("name"="party")) %>% 
+      mutate(coalition = case_when(
+        name %in% c("ODS", "TOP 09", "KDU-ČSL") ~ "Together", 
+        name %in% c("Piráti", "STAN") ~ "PirSTAN", 
+        name %in% c("Trikolora", "Svobodní", "Soukromníci") ~ "TSS",
+        TRUE ~ "No national PEC"
+      ))
     
     tbl_g %>% 
       activate(nodes) %>% 
@@ -227,37 +227,39 @@ list(
                           "Hora 2014", "Ostatní")) %>% 
       ggraph(., layout = "stress") + 
       geom_edge_fan(aes(edge_width = weight), alpha = 0.3) + 
-      geom_node_point(aes(size = n_municipalities, colour = coalition)) +
+      geom_node_point(aes(size = n, colour = coalition)) +
       geom_node_text(aes(label = name), repel = TRUE) + 
       scale_colour_viridis_d(end = 0.8) + 
-      theme_graph() + 
+      theme_graph(base_size = 17) + 
+      theme(legend.position = "top", legend.box = "vertical", 
+            legend.margin=margin()) + 
       labs(
-        title = "Pre-electoral coalitions in the 2018 local elections",
-        size = "N of municipalities in which the party run", 
+        # title = "Pre-electoral coalitions in the 2018 local elections",
+        # size = "N of municipalities\nin which the party run", 
         colour = "PEC in 2021 parliamentary election",
-        edge_width = "N of pre-electoral coalitions", 
-        caption = "Data: Czech Statistical Office (volby.cz), calculations by author, parties which did not form PECs excluded (except for ANO)"
-      )
+        # edge_width = "N of pre-electoral coalitions", 
+        # caption = "Data: Czech Statistical Office (volby.cz), calculations by author, parties which did not form PECs excluded (except for ANO)"
+      ) + 
+      guides(size = "none", edge_width = "none")
   }), 
   
   tar_target(coalitions_graph_2018_file_en, {
     ggsave(filename = "output/koalice_2018_en.png", coalitions_graph_2018_en, 
-           width = 12, height = 8)
+           width = 10, height = 7)
   }),
   
   tar_target(coalitions_graph_2022_en, {
     graph <- graph_from_adjacency_matrix(matrix_coalitions_2022, 
                                          mode = 'undirected', 
                                          weighted = TRUE)
-    V(graph)$n_municipalities <- party_municipalities_2022$n
-    V(graph)$coalition <- case_when(
-      names(V(graph)) %in% c("ODS", "TOP 09", "KDU-ČSL") ~ "Together", 
-      names(V(graph)) %in% c("Piráti", "STAN") ~ "PirSTAN", 
-      names(V(graph)) %in% c("Trikolora", "Svobodní", "Soukromníci") ~ "TSS",
-      TRUE ~ "No national PEC"
-    )
-    
-    tbl_g <- as_tbl_graph(graph)
+    tbl_g <- as_tbl_graph(graph) %>% 
+      left_join(., party_municipalities_2022, by = c("name"="party")) %>% 
+      mutate(coalition = case_when(
+        name %in% c("ODS", "TOP 09", "KDU-ČSL") ~ "Together", 
+        name %in% c("Piráti", "STAN") ~ "PirSTAN", 
+        name %in% c("Trikolora", "Svobodní", "Soukromníci") ~ "TSS",
+        TRUE ~ "No national PEC"
+      ))
     
     tbl_g %>% 
       activate(nodes) %>% 
@@ -267,22 +269,26 @@ list(
                           "DSZ-ZA PR.ZVÍŘ.")) %>% 
       ggraph(., layout = "stress", niter = 25) + 
       geom_edge_fan(aes(edge_width = weight), alpha = 0.3) + 
-      geom_node_point(aes(size = n_municipalities, colour = coalition)) +
+      geom_node_point(aes(size = n, colour = coalition)) +
       geom_node_text(aes(label = name), repel = TRUE) + 
-      theme_graph() + 
+      theme_graph(base_size = 17) + 
+      theme(legend.position = "top", legend.box = "vertical", 
+            legend.margin=margin()) + 
       scale_colour_viridis_d(end = 0.8) + 
       labs(
-        title = "Pre-electoral coalitions in the 2022 local election",
-        size = "N of municipalities in which the party run", 
+        # title = "Pre-electoral coalitions in the 2022 local election",
+        # size = "N of municipalities\nin which the party run", 
         colour = "PEC in 2021 parliamentary election",
-        edge_width = "N of pre-electoral coalitions", 
-        caption = "Data: Czech Statistical Office (volby.cz), calculations by author, parties which did not form PECs excluded"
-      )
+        # edge_width = "N of pre-electoral coalitions", 
+        # caption = "Data: Czech Statistical Office (volby.cz), calculations by author, parties which did not form PECs excluded"
+      ) + 
+      guides(size = "none", edge_width = "none")
+      
   }), 
   
   tar_target(coalitions_graph_2022_file_en, {
     ggsave(filename = "output/koalice_2022_en.png", coalitions_graph_2022_en, 
-           width = 12, height = 8)
+           width = 10, height = 7)
   }),
   
   # dyads - possible coalitions ---------------------------

@@ -296,14 +296,15 @@ ano_interaction_g <- ggeffects::ggeffect(m3_dyad, terms = c("spolu", "ano_govern
     geom_point(position = position_dodge(width = 0.1)) + 
     geom_linerange(aes(ymin = conf.low, ymax = conf.high),
                    position = position_dodge(width = 0.1)) + 
-    theme_minimal() + 
+    theme_minimal(base_size = 15) + 
     theme(legend.position = "top") + 
     scale_colour_viridis_d(end = 0.8) + 
     scale_y_continuous(labels = scales::label_percent(), 
                        limits = c(0, 0.8)) + 
     labs(x = "",
          y = "Predicted probability", 
-         colour = "")
+         colour = "") + 
+    guides(colour = guide_legend(nrow = 2))
 
 kscm_interaction_g <- ggeffects::ggeffect(m3_only_kscm_dyad, terms = c("spolu", "kscm_government")) %>% 
     as.data.frame() %>% 
@@ -316,7 +317,7 @@ kscm_interaction_g <- ggeffects::ggeffect(m3_only_kscm_dyad, terms = c("spolu", 
     geom_point(position = position_dodge(width = 0.1)) + 
     geom_linerange(aes(ymin = conf.low, ymax = conf.high),
                    position = position_dodge(width = 0.1)) + 
-    theme_minimal() + 
+    theme_minimal(base_size = 15) + 
     theme(legend.position = "top") + 
     scale_y_continuous(labels = scales::label_percent(), 
                        limits = c(0, 0.8)) + 
@@ -324,7 +325,8 @@ kscm_interaction_g <- ggeffects::ggeffect(m3_only_kscm_dyad, terms = c("spolu", 
                            option = "C") + 
     labs(x = "",
          y = "", 
-         colour = "")
+         colour = "") + 
+    guides(colour = guide_legend(nrow = 2))
 
 ano_interaction_g + kscm_interaction_g
 
